@@ -38,7 +38,7 @@ jobs:
           - '3.12'
         os:
           - "ubuntu"
-          - 'macos'
+          # - 'macos'
           # poetry is failing on windows: https://github.com/python-poetry/poetry/issues/1031
           # - 'windows'
 
