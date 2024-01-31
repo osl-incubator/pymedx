@@ -72,7 +72,7 @@ body:
       description: |
         Read the [`PyMedX` Code of Conduct][CoC] first.
 
-        [CoC]: https://github.com/ggpedia/pymedx/coc/CODE_OF_CONDUCT.md
+        [CoC]: https://github.com/osl-incubator/pymedx/coc/CODE_OF_CONDUCT.md
       options:
         - label: I agree to follow the Code of Conduct
           required: true

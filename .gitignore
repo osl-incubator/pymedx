@@ -100,8 +100,9 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
+# tools
 .mypy_cache/
+.ruff_cache/
 
 DSS.egg-info/
 test-reports/

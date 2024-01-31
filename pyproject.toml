@@ -1,20 +1,17 @@
 [tool.poetry]
 name = "pymedx"
-version = "0.5.1"  # semantic-release
+version = "0.1.0"  # semantic-release
 description = "PyMedX is a tool set for handling multimedia files."
 readme = "docs/index.md"
-authors = ["Ivan Ogasawara <ivan.ogasawara@gmail.com>"]
+authors = ["Gijs Wobben <gijswobben@gmail.com>", "Ivan Ogasawara <ivan.ogasawara@gmail.com>"]
 packages = [
   {include = "pymedx", from="src"},
 ]
-license = "Other"
+license = "MIT"
 exclude = [
   ".git/*",
   ".env*",
 ]
-
-[tool.poetry.scripts]
-"pymedx" = "pymedx.__main__:app"
 
 
 [tool.poetry.dependencies]
@@ -91,16 +88,3 @@ quote-style = "double"
 
 [tool.mypy]
 no_strict_optional = false
-
-[[tool.mypy.overrides]]
-module = [
-  "aubio",
-  "edge_tts",
-  "gtts",
-  "moviepy.editor",
-  "noisereduce",
-  "pydub",
-  "pydub.generators",
-  "pytube",
-]
-ignore_missing_imports = true
