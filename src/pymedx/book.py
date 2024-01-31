@@ -1,15 +1,13 @@
-import json
 import datetime
+import json
 
-from typing import TypeVar
-from typing import Optional
+from typing import Optional, TypeVar
 
 from .helpers import getContent
 
 
 class PubMedBookArticle(object):
-    """ Data class that contains a PubMed article.
-    """
+    """Data class that contains a PubMed article."""
 
     __slots__ = (
         "pubmed_id",
@@ -33,9 +31,7 @@ class PubMedBookArticle(object):
         *args: list,
         **kwargs: dict,
     ) -> None:
-        """ Initialization of the object from XML or from parameters.
-        """
-
+        """Initialization of the object from XML or from parameters."""
         # If an XML element is provided, use it for initialization
         if xml_element is not None:
             self._initializeFromXML(xml_element=xml_element)
@@ -57,7 +53,9 @@ class PubMedBookArticle(object):
         path = ".//AbstractText"
         return getContent(element=xml_element, path=path)
 
-    def _extractCopyrights(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractCopyrights(
+        self: object, xml_element: TypeVar("Element")
+    ) -> str:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
@@ -73,19 +71,27 @@ class PubMedBookArticle(object):
         path = ".//Language"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublicationType(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractPublicationType(
+        self: object, xml_element: TypeVar("Element")
+    ) -> str:
         path = ".//PublicationType"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublicationDate(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractPublicationDate(
+        self: object, xml_element: TypeVar("Element")
+    ) -> str:
         path = ".//PubDate/Year"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublisher(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractPublisher(
+        self: object, xml_element: TypeVar("Element")
+    ) -> str:
         path = ".//Publisher/PublisherName"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublisherLocation(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractPublisherLocation(
+        self: object, xml_element: TypeVar("Element")
+    ) -> str:
         path = ".//Publisher/PublisherLocation"
         return getContent(element=xml_element, path=path)
 
@@ -100,19 +106,23 @@ class PubMedBookArticle(object):
             for author in xml_element.findall(".//Author")
         ]
 
-    def _extractSections(self: object, xml_element: TypeVar("Element")) -> list:
+    def _extractSections(
+        self: object, xml_element: TypeVar("Element")
+    ) -> list:
         return [
             {
                 "title": getContent(section, path=".//SectionTitle"),
-                "chapter": getContent(element=section, path=".//LocationLabel"),
+                "chapter": getContent(
+                    element=section, path=".//LocationLabel"
+                ),
             }
             for section in xml_element.findall(".//Section")
         ]
 
-    def _initializeFromXML(self: object, xml_element: TypeVar("Element")) -> None:
-        """ Helper method that parses an XML element into an article object.
-        """
-
+    def _initializeFromXML(
+        self: object, xml_element: TypeVar("Element")
+    ) -> None:
+        """Helper method that parses an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
         self.title = self._extractTitle(xml_element)
@@ -129,21 +139,21 @@ class PubMedBookArticle(object):
         self.sections = self._extractSections(xml_element)
 
     def toDict(self: object) -> dict:
-        """ Helper method to convert the parsed information to a Python dict.
-        """
-
+        """Helper method to convert the parsed information to a Python dict."""
         return {
             key: (self.__getattribute__(key) if hasattr(self, key) else None)
             for key in self.__slots__
         }
 
     def toJSON(self: object) -> str:
-        """ Helper method for debugging, dumps the object as JSON string.
-        """
-
+        """Helper method for debugging, dumps the object as JSON string."""
         return json.dumps(
             {
-                key: (value if not isinstance(value, datetime.date) else str(value))
+                key: (
+                    value
+                    if not isinstance(value, datetime.date)
+                    else str(value)
+                )
                 for key, value in self.toDict().items()
             },
             sort_keys=True,

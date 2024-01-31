@@ -32,8 +32,7 @@ repos:
         language: system
         exclude: |
           (?x)(
-            docs|
-            tests
+            docs
           )
         pass_filenames: true
         types:
@@ -48,7 +47,7 @@ repos:
         exclude: |
           (?x)(
             docs|
-            tests
+            examples|
           )
         types:
           - python

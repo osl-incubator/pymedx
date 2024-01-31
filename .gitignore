@@ -104,6 +104,7 @@ venv.bak/
 .mypy_cache/
 .ruff_cache/
 
+.vscode/
 DSS.egg-info/
 test-reports/
 .coveragerc
