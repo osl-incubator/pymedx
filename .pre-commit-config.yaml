@@ -1,0 +1,95 @@
+default_stages:
+  - commit
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: end-of-file-fixer
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v3.0.2"
+    hooks:
+      - id: prettier
+        exclude: ".makim.yaml"
+
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format
+        exclude: |
+          (?x)(
+            docs
+          )
+        language: system
+        pass_filenames: true
+        types:
+          - python
+
+      - id: ruff-linter
+        name: ruff-linter
+        entry: ruff check
+        language: system
+        exclude: |
+          (?x)(
+            docs|
+            tests
+          )
+        pass_filenames: true
+        types:
+          - python
+
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        files: "./"
+        pass_filenames: true
+        exclude: |
+          (?x)(
+            docs|
+            tests
+          )
+        types:
+          - python
+
+      - id: shellcheck
+        name: shellcheck
+        entry: shellcheck
+        language: system
+        types_or:
+          - sh
+          - shell
+          - ash
+          - bash
+          - bats
+          - dash
+          - ksh
+
+      - id: bandit
+        name: bandit
+        entry: bandit
+        language: system
+        args: ["--configfile", "pyproject.toml", "-iii", "-lll"]
+        pass_filenames: true
+        types:
+          - python
+
+      - id: vulture
+        name: vulture
+        entry: vulture --min-confidence 80
+        language: system
+        files: "src/umlizer"
+        description: Find unused Python code.
+        pass_filenames: true
+        types:
+          - python
+
+      - id: mccabe
+        name: mccabe
+        entry: python -m mccabe --min 10
+        language: system
+        files: "src/umlizer"
+        pass_filenames: true
+        types:
+          - python

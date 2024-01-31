@@ -1,7 +1,7 @@
 import csv
 import itertools
 
-from pymed import PubMed
+from pymedx import PubMed
 
 
 # Create a PubMed object that GraphQL can use to query

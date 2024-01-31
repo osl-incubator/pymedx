@@ -1,7 +1,7 @@
-> PyMedX is a fork from a archived project called PyMed: https://github.com/gijswobben/pymed
+> PyMedX is a fork from a archived project called PyMed: https://github.com/gijswobben/pymedx
 
-# PyMed - PubMed Access through Python
-PyMed is a Python library that provides access to PubMed through the PubMed API.
+# PyMedX - PubMed Access through Python
+PyMedX is a Python library that provides access to PubMed through the PubMed API.
 
 ## Why this library?
 The PubMed API is not very well documented and querying it in a performant way is too complicated and time consuming for researchers. This wrapper provides access to the API in a consistent, readable and performant way.
@@ -17,7 +17,7 @@ This library takes care of the following for you:
 For full (working) examples have a look at the `examples/` folder in this repository. In essence you only need to import the `PubMed` class, instantiate it, and use it to query:
 
 ```python
-from pymed import PubMed
+from pymedx import PubMed
 pubmed = PubMed(tool="MyTool", email="my@email.address")
 results = pubmed.query("Some query", max_results=500)
 ```
@@ -30,5 +30,5 @@ The original documentation of the PubMed API can be found here: [PubMed Central]
 >   * _tool_ should be the name of the application, as a string value with no internal spaces, and
 >   * _email_ should be the e-mail address of the maintainer of the tool, and should be a valid e-mail address.
 
-## Notice of Non-Affiliation and Disclaimer 
+## Notice of Non-Affiliation and Disclaimer
 The author of this library is not affiliated, associated, authorized, endorsed by, or in any way officially connected with PubMed, or any of its subsidiaries or its affiliates. The official PubMed website can be found at https://www.ncbi.nlm.nih.gov/pubmed/.

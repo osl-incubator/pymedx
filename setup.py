@@ -1,7 +1,7 @@
 import os
 from setuptools import setup
 from setuptools import find_packages
-from pymed.version import __version__
+from pymedx.version import __version__
 
 
 def read(fname):
@@ -9,14 +9,14 @@ def read(fname):
 
 
 setup(
-    name="pymed",
+    name="pymedx",
     version=__version__,
     author="Gijs Wobben",
     author_email="gijswobben@gmail.com",
     description=("Python library for access to PubMed"),
     license="MIT",
     keywords="PubMed PMC",
-    url="https://github.com/gijswobben/pymed",
+    url="https://github.com/gijswobben/pymedx",
     packages=find_packages(),
     install_requires=["requests>=2.20.0"],
     tests_require=["pytest"],

@@ -1,0 +1,116 @@
+name: main
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-branch:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-pr-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check if the PR's branch is updated
+        uses: osl-incubator/gh-check-pr-is-updated@1.0.0
+        with:
+          remote_branch: origin/main
+          pr_sha: ${{ github.event.pull_request.head.sha }}
+
+  tests:
+    needs: check-branch
+    strategy:
+      matrix:
+        python_version:
+          - "3.8.1"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          # - '3.12'
+        os:
+          - "ubuntu"
+          # - 'macos'
+          # poetry is failing on windows: https://github.com/python-poetry/poetry/issues/1031
+          # - 'windows'
+
+    runs-on: ${{ matrix.os }}-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ci-tests-${{ matrix.os }}-${{ matrix.python_version }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniconda-version: "latest"
+          environment-file: conda/dev.yaml
+          channels: conda-forge,nodefaults
+          activate-environment: pymedx
+          auto-update-conda: true
+          conda-solver: libmamba
+
+      - name: Install dependencies
+        run: |
+          sudo apt install ffmpeg
+          poetry install
+
+      - name: Run tests
+        run: makim tests.unittest
+
+  linter-and-docs:
+    needs: check-branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    concurrency:
+      group: ci-linter-docs-${{ matrix.os }}-${{ matrix.python_version }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniconda-version: "latest"
+          environment-file: conda/dev.yaml
+          channels: conda-forge,nodefaults
+          activate-environment: pymedx
+          auto-update-conda: true
+          conda-solver: libmamba
+
+      - name: Install dependencies
+        run: |
+          poetry config virtualenvs.create false
+          poetry install
+
+      - name: Test documentation generation
+        run: makim docs.build
+
+      - name: Run style checks
+        if: success() || failure()
+        run: |
+          pre-commit install
+          makim tests.linter
+
+      - name: Setup tmate session
+        if: "${{ failure() && (contains(github.event.pull_request.labels.*.name, 'ci:enable-debugging')) }}"
+        uses: mxschmitt/action-tmate@v3
