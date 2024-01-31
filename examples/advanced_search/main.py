@@ -13,7 +13,6 @@ results = pubmed.query(query, max_results=500)
 
 # Loop over the retrieved articles
 for article in results:
-
     # Extract and format information from the article
     article_id = article.pubmed_id
     title = article.title
