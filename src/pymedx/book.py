@@ -1,7 +1,8 @@
 import datetime
 import json
 
-from typing import Optional, TypeVar
+from typing import Any, Dict, List, Optional, Union
+from xml.etree.ElementTree import Element
 
 from .helpers import getContent
 
@@ -26,12 +27,13 @@ class PubMedBookArticle(object):
     )
 
     def __init__(
-        self: object,
-        xml_element: Optional[TypeVar("Element")] = None,
-        *args: list,
-        **kwargs: dict,
+        self,
+        xml_element: Optional[Element] = None,
+        *args: List[str],
+        **kwargs: Dict[Any, Any],
     ) -> None:
         """Initialization of the object from XML or from parameters."""
+
         # If an XML element is provided, use it for initialization
         if xml_element is not None:
             self._initializeFromXML(xml_element=xml_element)
@@ -41,61 +43,73 @@ class PubMedBookArticle(object):
             for field in self.__slots__:
                 self.__setattr__(field, kwargs.get(field, None))
 
-    def _extractPubMedId(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractPubMedId(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='pubmed']"
         return getContent(element=xml_element, path=path)
 
-    def _extractTitle(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractTitle(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//BookTitle"
         return getContent(element=xml_element, path=path)
 
-    def _extractAbstract(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractAbstract(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//AbstractText"
         return getContent(element=xml_element, path=path)
 
     def _extractCopyrights(
-        self: object, xml_element: TypeVar("Element")
-    ) -> str:
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
-    def _extractDoi(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractDoi(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='doi']"
         return getContent(element=xml_element, path=path)
 
-    def _extractIsbn(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractIsbn(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//Isbn"
         return getContent(element=xml_element, path=path)
 
-    def _extractLanguage(self: object, xml_element: TypeVar("Element")) -> str:
+    def _extractLanguage(
+        self: object, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//Language"
         return getContent(element=xml_element, path=path)
 
     def _extractPublicationType(
-        self: object, xml_element: TypeVar("Element")
-    ) -> str:
+        self, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//PublicationType"
         return getContent(element=xml_element, path=path)
 
     def _extractPublicationDate(
-        self: object, xml_element: TypeVar("Element")
-    ) -> str:
+        self, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//PubDate/Year"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublisher(
-        self: object, xml_element: TypeVar("Element")
-    ) -> str:
+    def _extractPublisher(self, xml_element: Element) -> Union[str, None, int]:
         path = ".//Publisher/PublisherName"
         return getContent(element=xml_element, path=path)
 
     def _extractPublisherLocation(
-        self: object, xml_element: TypeVar("Element")
-    ) -> str:
+        self, xml_element: Element
+    ) -> Union[str, None, int]:
         path = ".//Publisher/PublisherLocation"
         return getContent(element=xml_element, path=path)
 
-    def _extractAuthors(self: object, xml_element: TypeVar("Element")) -> list:
+    def _extractAuthors(
+        self: object, xml_element: Element
+    ) -> List[dict[str, Union[str, None, int]]]:
         return [
             {
                 "collective": getContent(author, path=".//CollectiveName"),
@@ -107,8 +121,8 @@ class PubMedBookArticle(object):
         ]
 
     def _extractSections(
-        self: object, xml_element: TypeVar("Element")
-    ) -> list:
+        self, xml_element: Element
+    ) -> List[dict[str, Union[str, None, int]]]:
         return [
             {
                 "title": getContent(section, path=".//SectionTitle"),
@@ -119,10 +133,9 @@ class PubMedBookArticle(object):
             for section in xml_element.findall(".//Section")
         ]
 
-    def _initializeFromXML(
-        self: object, xml_element: TypeVar("Element")
-    ) -> None:
+    def _initializeFromXML(self, xml_element: Element) -> None:
         """Helper method that parses an XML element into an article object."""
+
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
         self.title = self._extractTitle(xml_element)
@@ -138,15 +151,17 @@ class PubMedBookArticle(object):
         self.publisher_location = self._extractPublisherLocation(xml_element)
         self.sections = self._extractSections(xml_element)
 
-    def toDict(self: object) -> dict:
+    def toDict(self) -> Dict[Any, Any]:
         """Helper method to convert the parsed information to a Python dict."""
+
         return {
             key: (self.__getattribute__(key) if hasattr(self, key) else None)
             for key in self.__slots__
         }
 
-    def toJSON(self: object) -> str:
+    def toJSON(self) -> str:
         """Helper method for debugging, dumps the object as JSON string."""
+
         return json.dumps(
             {
                 key: (
