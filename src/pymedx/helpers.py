@@ -61,4 +61,4 @@ def getContent(
         return default
 
     # Extract the text and return it
-    return separator.join([sub.text for sub in result if sub.text])
+    return separator.join([sub.text for sub in result if sub.text is not None])
