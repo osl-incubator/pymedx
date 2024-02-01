@@ -35,7 +35,7 @@ def getContent(
     path: str,
     default: Optional[str] = None,
     separator: str = "\n",
-) -> Union[str, int]:
+) -> Optional[Union[str, int]]:
     """
     Retrieve text content of an XML element.
 
@@ -58,8 +58,7 @@ def getContent(
 
     # Return the default if there is no such element
     if result is None or len(result) == 0:
-        return default or ""
+        return default
 
     # Extract the text and return it
-    else:
-        return separator.join([sub.text or default or "" for sub in result])
+    return separator.join([sub.text for sub in result if sub.text])

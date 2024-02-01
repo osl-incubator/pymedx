@@ -42,8 +42,9 @@ class TestHelpers:
 
         # Test default value when no text is present
         child_without_text.text = None  # Ensuring the child has no text
+        assert getContent(root, "child2", default="default text") == ""
         assert (
-            getContent(root, "child2", default="default text")
+            getContent(root, "child_x", default="default text")
             == "default text"
         )
 
