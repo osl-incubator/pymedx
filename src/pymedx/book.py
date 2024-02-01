@@ -8,7 +8,7 @@ from xml.etree.ElementTree import Element
 from .helpers import getContent
 
 
-class PubMedBookArticle(object):
+class PubMedBookArticle:
     """Data class that contains a PubMed article."""
 
     __slots__ = (
