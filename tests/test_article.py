@@ -3,17 +3,13 @@ import datetime
 
 import pytest
 
-from pymedx.api import PubMed
-
 DOI_LEN_MIN = 5
 DOI_LEN_MAX = 255
 
 
 @pytest.fixture(scope="module")
-def sample_article():
+def sample_article(pubmed):
     """Fixture to create a PubMedArticle instance from dynamic XML."""
-    pubmed = PubMed(tool="YourTestTool", email="your_email@example.com")
-
     article_ids = pubmed.query(
         "COVID-19 vaccines", "2021-01-01", "2021-01-31", max_results=10
     )

@@ -1,6 +1,5 @@
 """Tests for the api module."""
 
-import pytest
 
 from pymedx.api import (
     PubMed,
@@ -9,11 +8,6 @@ from pymedx.api import (
 
 class TestPubMed:
     """Tests for PubMed."""
-
-    @pytest.fixture
-    def pubmed(self) -> PubMed:
-        """Fixture to create a PubMed instance."""
-        return PubMed(tool="TestTool", email="test@example.com")
 
     def test_initialization(self, pubmed: PubMed):
         """Test the initialization of the PubMed class."""

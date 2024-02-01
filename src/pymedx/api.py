@@ -22,6 +22,7 @@ class PubMed:
         self,
         tool: str = "my_tool",
         email: str = "my_email@example.com",
+        api_key: str = "",
     ) -> None:
         """
         Initialize the PubMed object.
@@ -35,6 +36,8 @@ class PubMed:
         email: String
             email of the user of the tool. This parameter
             is not required but kindly requested by PMC (PubMed Central).
+        api_key: str
+            the NCBI API KEY
 
         Returns
         -------
@@ -50,6 +53,10 @@ class PubMed:
         self.parameters: Dict[str, Union[str, int, List[str]]]
         # Define the standard / default query parameters
         self.parameters = {"tool": tool, "email": email, "db": "pubmed"}
+
+        if api_key:
+            self.parameters["api_key"] = api_key
+            self._rateLimit = 10
 
     def query(
         self,

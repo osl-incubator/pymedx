@@ -3,17 +3,9 @@ import datetime
 
 import pytest
 
-from pymedx.api import PubMed
-
 DOI_LEN_MIN = 5
 DOI_LEN_MAX = 255
 TITLE_LEN_MIN = 10
-
-
-@pytest.fixture(scope="module")
-def pubmed():
-    """Fixture to fetch a sample book article XML from PubMed dynamically."""
-    return PubMed(tool="YourTestTool", email="your_email@example.com")
 
 
 @pytest.fixture

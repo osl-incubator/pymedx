@@ -1,6 +1,10 @@
 """Configuration for the tests."""
+import os
+
 import pytest
 import requests_cache
+
+from pymedx.api import PubMed
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -22,3 +26,15 @@ def setup_request_cache():
     yield
     # Teardown logic if necessary;
     # requests_cache doesn't require special teardown
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pubmed() -> PubMed:
+    """Fixture to create a PubMed instance."""
+    params = dict(tool="TestTool", email="test@example.com")
+
+    api_key = os.getenv("NCBI_API_KEY", "")
+    if api_key:
+        params["api_key"] = api_key
+
+    return PubMed(**params)
