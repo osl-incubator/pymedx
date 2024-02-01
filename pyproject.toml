@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymedx"
-version = "0.1.1"  # semantic-release
+version = "0.2.0"  # semantic-release
 description = "PyMedX is a tool set for handling multimedia files."
 readme = "docs/index.md"
 authors = ["Gijs Wobben <gijswobben@gmail.com>", "Ivan Ogasawara <ivan.ogasawara@gmail.com>"]
