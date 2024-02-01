@@ -69,6 +69,8 @@ jobs:
           poetry install
 
       - name: Run tests
+        env:
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
         run: makim tests.unittest
 
   linter-and-docs:

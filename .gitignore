@@ -110,3 +110,6 @@ test-reports/
 .coveragerc
 test_env/
 .vscode/settings.json
+
+# pytest cache
+api_cache.sqlite
