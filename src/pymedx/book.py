@@ -1,3 +1,4 @@
+"""Module for functions about book article."""
 import datetime
 import json
 
@@ -32,8 +33,10 @@ class PubMedBookArticle(object):
         *args: List[str],
         **kwargs: Dict[Any, Any],
     ) -> None:
-        """Initialization of the object from XML or from parameters."""
-
+        """Initialize of the object from XML or from parameters."""
+        if args:
+            # keep it for resolving problems with linter
+            pass
         # If an XML element is provided, use it for initialization
         if xml_element is not None:
             self._initializeFromXML(xml_element=xml_element)
@@ -134,8 +137,7 @@ class PubMedBookArticle(object):
         ]
 
     def _initializeFromXML(self, xml_element: Element) -> None:
-        """Helper method that parses an XML element into an article object."""
-
+        """Parse an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
         self.title = self._extractTitle(xml_element)
@@ -152,16 +154,14 @@ class PubMedBookArticle(object):
         self.sections = self._extractSections(xml_element)
 
     def toDict(self) -> Dict[Any, Any]:
-        """Helper method to convert the parsed information to a Python dict."""
-
+        """Convert the parsed information to a Python dict."""
         return {
             key: (self.__getattribute__(key) if hasattr(self, key) else None)
             for key in self.__slots__
         }
 
     def toJSON(self) -> str:
-        """Helper method for debugging, dumps the object as JSON string."""
-
+        """Dump the object as JSON string."""
         return json.dumps(
             {
                 key: (

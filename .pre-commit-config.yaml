@@ -40,15 +40,9 @@ repos:
 
       - id: mypy
         name: mypy
-        entry: mypy
+        entry: mypy .
         language: system
-        files: "./"
-        pass_filenames: true
-        exclude: |
-          (?x)(
-            docs|
-            examples|
-          )
+        pass_filenames: false
         types:
           - python
 
@@ -78,7 +72,7 @@ repos:
         name: vulture
         entry: vulture --min-confidence 80
         language: system
-        files: "src/umlizer"
+        files: "src/pymedx"
         description: Find unused Python code.
         pass_filenames: true
         types:
@@ -88,7 +82,7 @@ repos:
         name: mccabe
         entry: python -m mccabe --min 10
         language: system
-        files: "src/umlizer"
+        files: "src/pymedx"
         pass_filenames: true
         types:
           - python
