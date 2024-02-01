@@ -1,3 +1,4 @@
+"""Module for helper functions."""
 from typing import Generator, List, Optional, Union
 from xml.etree.ElementTree import Element
 
@@ -5,16 +6,21 @@ from xml.etree.ElementTree import Element
 def batches(
     iterable: List[str], n: int = 1
 ) -> Generator[List[str], str, None]:
-    """Helper method that creates batches from an iterable.
-
-    Parameters:
-        - iterable      Iterable, the iterable to batch.
-        - n             Int, the batch size.
-
-    Returns:
-        - batches       List, yields batches of n objects taken from the iterable.
     """
+    Create batches from an iterable.
 
+    Parameters
+    ----------
+    iterable: Iterable
+        the iterable to batch.
+    n: Int
+        the batch size.
+
+    Returns
+    -------
+    batches: List
+        yields batches of n objects taken from the iterable.
+    """
     # Get the length of the iterable
     length = len(iterable)
 
@@ -30,18 +36,19 @@ def getContent(
     default: Optional[str] = None,
     separator: str = "\n",
 ) -> Union[str, None, int]:
-    """Internal helper method that retrieves the text content of an
-    XML element.
+    """
+    Retrieve text content of an XML element.
 
-    Parameters:
+    Parameters
+    ----------
         - element   Element, the XML element to parse.
         - path      Str, Nested path in the XML element.
         - default   Str, default value to return when no text is found.
 
-    Returns:
+    Returns
+    -------
         - text      Str, text in the XML node.
     """
-
     # Find the path in the element
     result = element.findall(path)
 

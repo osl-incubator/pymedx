@@ -93,3 +93,9 @@ exclude = [
     '^docs/$',
     '^examples/$',
 ]
+
+[[tool.mypy.overrides]]
+module = [
+  "requests",
+]
+ignore_missing_imports = true

@@ -1,3 +1,4 @@
+"""API module for PubMed."""
 import datetime
 import itertools
 import xml.etree.ElementTree as xml
@@ -15,26 +16,30 @@ BASE_URL = "https://eutils.ncbi.nlm.nih.gov"
 
 
 class PubMed:
-    """Wrapper around the PubMed API."""
+    """Wrap around the PubMed API."""
 
     def __init__(
         self,
         tool: str = "my_tool",
         email: str = "my_email@example.com",
     ) -> None:
-        """Initialization of the object.
-
-        Parameters:
-            - tool      String, name of the tool that is executing the query.
-                        This parameter is not required but kindly requested by
-                        PMC (PubMed Central).
-            - email     String, email of the user of the tool. This parameter
-                        is not required but kindly requested by PMC (PubMed Central).
-
-        Returns:
-            - None
         """
+        Initialize the PubMed object.
 
+        Parameters
+        ----------
+        tool: String
+            name of the tool that is executing the query.
+            This parameter is not required but kindly requested by
+            PMC (PubMed Central).
+        email: String
+            email of the user of the tool. This parameter
+            is not required but kindly requested by PMC (PubMed Central).
+
+        Returns
+        -------
+        None
+        """
         # Store the input parameters
         self.tool = tool
         self.email = email
@@ -53,17 +58,21 @@ class PubMed:
         max_date: str,
         max_results: int = 100,
     ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
-        """Method that executes a query agains the GraphQL schema, automatically
-        inserting the PubMed data loader.
-
-        Parameters:
-            - query     String, the GraphQL query to execute against the schema.
-
-        Returns:
-            - result    ExecutionResult, GraphQL object that contains the result
-                        in the "data" attribute.
         """
+        Execute a query agains the GraphQL schema.
 
+        Automatically inserting the PubMed data loader.
+
+        Parameters
+        ----------
+        query: String
+            the GraphQL query to execute against the schema.
+
+        Returns
+        -------
+        result: ExecutionResult
+            GraphQL object that contains the result in the "data" attribute.
+        """
         # Retrieve the article IDs for the query
         article_ids = self._getArticleIds(
             query=query,
@@ -84,15 +93,19 @@ class PubMed:
         return itertools.chain.from_iterable(articles)
 
     def getTotalResultsCount(self, query: str) -> int:
-        """Helper method that returns the total number of results that match the query.
-
-        Parameters:
-            - query                 String, the query to send to PubMed
-
-        Returns:
-            - total_results_count   Int, total number of results for the query in PubMed
         """
+        Return the total number of results that match the query.
 
+        Parameters
+        ----------
+        query: String
+            the query to send to PubMed
+
+        Returns
+        -------
+        total_results_count: Int
+            total number of results for the query in PubMed
+        """
         # Get the default parameters
         parameters = self.parameters.copy()
 
@@ -105,7 +118,8 @@ class PubMed:
             url="/entrez/eutils/esearch.fcgi", parameters=parameters
         )
 
-        # Get from the returned meta data the total number of available results for the query
+        # Get from the returned meta data the total number of available
+        # results for the query
         total_results_count = int(
             response.get("esearchresult", {}).get("count")
         )
@@ -114,12 +128,14 @@ class PubMed:
         return total_results_count
 
     def _exceededRateLimit(self) -> bool:
-        """Helper method to check if we've exceeded the rate limit.
-
-        Returns:
-            - exceeded      Bool, Whether or not the rate limit is exceeded.
         """
+        Check if we've exceeded the rate limit.
 
+        Returns
+        -------
+        exceeded: Bool
+            Whether or not the rate limit is exceeded.
+        """
         # Remove requests from the list that are longer than 1 second ago
         self._requestsMade = [
             requestTime
@@ -128,7 +144,8 @@ class PubMed:
             > datetime.datetime.now() - datetime.timedelta(seconds=1)
         ]
 
-        # Return whether we've made more requests in the last second, than the rate limit
+        # Return whether we've made more requests in the last second,
+        # than the rate limit
         return len(self._requestsMade) > self._rateLimit
 
     def _get(
@@ -137,21 +154,26 @@ class PubMed:
         parameters: Dict[Any, Any] = dict(),
         output: str = "json",
     ) -> Union[str, requests.models.Response]:
-        """Generic helper method that makes a request to PubMed.
+        """
+        Make a request to PubMed.
 
-        Parameters:
-            - url           Str, last part of the URL that is requested (will
-                            be combined with the base url)
-            - parameters    Dict, parameters to use for the request
-            - output        Str, type of output that is requested (defaults to
-                            JSON but can be used to retrieve XML)
+        Parameters
+        ----------
+        url: Str
+            last part of the URL that is requested (will
+            be combined with the base url)
+        parameters: Dict
+            parameters to use for the request
+        output: Str
+            type of output that is requested (defaults to
+            JSON but can be used to retrieve XML)
 
-        Returns:
+        Returns
+        -------
             - response      Dict / str, if the response is valid JSON it will
                             be parsed before returning, otherwise a string is
                             returend
         """
-
         # Make sure the rate limit is not exceeded
         while self._exceededRateLimit():
             pass
@@ -178,15 +200,16 @@ class PubMed:
     def _getArticles(
         self, article_ids: List[str]
     ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
-        """Helper method that batches a list of article IDs and retrieves the content.
+        """Batch a list of article IDs and retrieves the content.
 
-        Parameters:
+        Parameters
+        ----------
             - article_ids   List, article IDs.
 
-        Returns:
+        Returns
+        -------
             - articles      List, article objects.
         """
-
         # Get the default parameters
         parameters = self.parameters.copy()
         parameters["id"] = article_ids
@@ -214,16 +237,20 @@ class PubMed:
         max_date: str,
         max_results: int,
     ) -> List[str]:
-        """Helper method to retrieve the article IDs for a query.
+        """Retrieve the article IDs for a query.
 
-        Parameters:
-            - query         Str, query to be executed against the PubMed database.
-            - max_results   Int, the maximum number of results to retrieve.
+        Parameters
+        ----------
+        query: Str
+            query to be executed against the PubMed database.
+        max_results: Int
+            the maximum number of results to retrieve.
 
-        Returns:
-            - article_ids   List, article IDs as a list.
+        Returns
+        -------
+        article_ids: List
+            article IDs as a list.
         """
-
         # Create a placeholder for the retrieved IDs
         article_ids = []
 
@@ -269,7 +296,8 @@ class PubMed:
         if max_results == -1:
             max_results = total_result_count
 
-        # If not all articles are retrieved, continue to make requests untill we have everything
+        # If not all articles are retrieved, continue to make requests until
+        # we have everything
         while (
             retrieved_count < total_result_count
             and retrieved_count < max_results
@@ -280,7 +308,8 @@ class PubMed:
             ):
                 parameters["retmax"] = max_results - retrieved_count
 
-            # Start the collection from the number of already retrieved articles
+            # Start the collection from the number of already retrieved
+            # articles
             parameters["retstart"] = retrieved_count
 
             # Make a new request
