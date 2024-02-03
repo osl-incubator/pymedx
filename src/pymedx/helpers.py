@@ -1,6 +1,9 @@
 """Module for helper functions."""
-from typing import Generator, List, Optional, Union
-from xml.etree.ElementTree import Element
+from typing import Generator, List, Optional, Union, cast
+
+import lxml.etree
+
+from lxml.etree import Element
 
 
 def batches(
@@ -62,3 +65,78 @@ def getContent(
 
     # Extract the text and return it
     return separator.join([sub.text for sub in result if sub.text is not None])
+
+def getContentUnique(
+    element: Element,
+    path: str,
+    default: Optional[str] = None,
+) -> Optional[Union[str, int]]:
+    """
+    Retrieve text content of an XML element. Returns a unique value.
+
+    Parameters
+    ----------
+    element: Element
+        the XML element to parse.
+    path: Str
+        Nested path in the XML element.
+    default: Str
+        default value to return when no text is found.
+
+    Returns
+    -------
+    text: Str
+        text in the XML node.
+    """
+    # Find the path in the element
+    result = cast(List[Element], element.findall(path))
+
+    # Return the default if there is no such element
+    if not result:
+        return default
+
+    # Extract the text and return it
+    return cast(str, result[0].text)
+
+
+def getAllContent(
+    element: Element,
+    path: str,
+    default: Optional[str] = None,
+) -> Optional[Union[str, int]]:
+    """
+    Retrieve text content of an XML element.
+    
+    Return all the text inside the path and omit XML tags inside.
+
+    Parameters
+    ----------
+    element: Element
+        the XML element to parse.
+    path: Str
+        Nested path in the XML element.
+    default: Str
+        default value to return when no text is found.
+
+    Returns
+    -------
+    text: str
+        text in the XML node.
+    """
+    # Find the path in the element
+    raw_result = element.findall(path)
+
+    # Return the default if there is no such element
+    if not raw_result:
+        return default
+
+    # Get all text avoiding the tags
+    result = cast(
+        str,
+        lxml.etree.tostring(
+            raw_result[0], method="text", encoding="utf-8"
+        ).decode("utf-8"),
+    )
+
+    # Extract the text and return it
+    return result

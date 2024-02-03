@@ -3,12 +3,13 @@ import datetime
 import json
 
 from typing import Any, Dict, List, Optional, Union
-from xml.etree.ElementTree import Element
 
-from .helpers import getContent
+from lxml.etree import Element
+
+from .helpers import getAllContent, getContent, getContentUnique
 
 
-class PubMedArticle(object):
+class PubMedArticle:
     """Data class that contains a PubMed article."""
 
     __slots__ = (
@@ -47,12 +48,12 @@ class PubMedArticle(object):
                 self.__setattr__(field, kwargs.get(field, None))
 
     def _extractPubMedId(self, xml_element: Element) -> Union[str, None, int]:
-        path = ".//ArticleId[@IdType='pubmed']"
-        return getContent(element=xml_element, path=path)
+        path = ".//PMID"
+        return getContentUnique(element=xml_element, path=path)
 
     def _extractTitle(self, xml_element: Element) -> Union[str, None, int]:
         path = ".//ArticleTitle"
-        return getContent(element=xml_element, path=path)
+        return getAllContent(element=xml_element, path=path)
 
     def _extractKeywords(self, xml_element: Element) -> List[Any]:
         path = ".//Keyword"
@@ -68,10 +69,10 @@ class PubMedArticle(object):
 
     def _extractAbstract(self, xml_element: Element) -> Union[str, None, int]:
         path = ".//AbstractText"
-        return getContent(element=xml_element, path=path)
+        return getAllContent(element=xml_element, path=path)
 
     def _extractConclusions(
-        self: object, xml_element: Element
+        self, xml_element: Element
     ) -> Union[str, None, int]:
         path = ".//AbstractText[@Label='CONCLUSION']"
         return getContent(element=xml_element, path=path)
@@ -92,7 +93,7 @@ class PubMedArticle(object):
 
     def _extractDoi(self, xml_element: Element) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='doi']"
-        return getContent(element=xml_element, path=path)
+        return getContentUnique(element=xml_element, path=path)
 
     def _extractPublicationDate(
         self, xml_element: Element

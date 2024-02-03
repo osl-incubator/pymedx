@@ -3,7 +3,8 @@ import datetime
 import json
 
 from typing import Any, Dict, List, Optional, Union
-from xml.etree.ElementTree import Element
+
+from lxml.etree import Element
 
 from .helpers import getContent
 
