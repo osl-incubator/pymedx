@@ -17,6 +17,7 @@ exclude = [
 [tool.poetry.dependencies]
 python = ">3.8.1,<4"
 requests = ">=2.20.0"
+lxml = "^5.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.3.2"
