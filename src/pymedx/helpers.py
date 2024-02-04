@@ -3,7 +3,7 @@ from typing import Generator, List, Optional, Union, cast
 
 import lxml.etree
 
-from lxml.etree import Element
+from lxml.etree import _Element
 
 
 def batches(
@@ -34,7 +34,7 @@ def batches(
 
 
 def getContent(
-    element: Element,
+    element: _Element,
     path: str,
     default: Optional[str] = None,
     separator: str = "\n",
@@ -66,8 +66,9 @@ def getContent(
     # Extract the text and return it
     return separator.join([sub.text for sub in result if sub.text is not None])
 
+
 def getContentUnique(
-    element: Element,
+    element: _Element,
     path: str,
     default: Optional[str] = None,
 ) -> Optional[Union[str, int]]:
@@ -89,7 +90,7 @@ def getContentUnique(
         text in the XML node.
     """
     # Find the path in the element
-    result = cast(List[Element], element.findall(path))
+    result = cast(List[_Element], element.findall(path))
 
     # Return the default if there is no such element
     if not result:
@@ -100,13 +101,13 @@ def getContentUnique(
 
 
 def getAllContent(
-    element: Element,
+    element: _Element,
     path: str,
     default: Optional[str] = None,
 ) -> Optional[Union[str, int]]:
     """
     Retrieve text content of an XML element.
-    
+
     Return all the text inside the path and omit XML tags inside.
 
     Parameters

@@ -114,7 +114,6 @@ class PubMed:
         total_results_count: Int
             total number of results for the query in PubMed
         """
-
         # Get the default parameters
         parameters = self.parameters.copy()
 
