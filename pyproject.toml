@@ -42,7 +42,7 @@ mkdocstrings-python = ">=1.1.2"
 jupyterlab = ">=4.0.5"
 makim = "1.12.0"
 requests-cache = ">=1"
-lxml-stubs = "^0.5.1"
+types-lxml = "^2023.10.21"
 
 [tool.pytest.ini_options]
 testpaths = [
