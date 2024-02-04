@@ -3,7 +3,8 @@ import datetime
 import json
 
 from typing import Any, Dict, List, Optional, Union
-from xml.etree.ElementTree import Element
+
+from lxml.etree import _Element
 
 from .helpers import getContent
 
@@ -29,7 +30,7 @@ class PubMedBookArticle:
 
     def __init__(
         self,
-        xml_element: Optional[Element] = None,
+        xml_element: Optional[_Element] = None,
         *args: List[str],
         **kwargs: Dict[Any, Any],
     ) -> None:
@@ -47,71 +48,73 @@ class PubMedBookArticle:
                 self.__setattr__(field, kwargs.get(field, None))
 
     def _extractPubMedId(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='pubmed']"
         return getContent(element=xml_element, path=path)
 
     def _extractTitle(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//BookTitle"
         return getContent(element=xml_element, path=path)
 
     def _extractAbstract(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//AbstractText"
         return getContent(element=xml_element, path=path)
 
     def _extractCopyrights(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
     def _extractDoi(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='doi']"
         return getContent(element=xml_element, path=path)
 
     def _extractIsbn(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//Isbn"
         return getContent(element=xml_element, path=path)
 
     def _extractLanguage(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//Language"
         return getContent(element=xml_element, path=path)
 
     def _extractPublicationType(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//PublicationType"
         return getContent(element=xml_element, path=path)
 
     def _extractPublicationDate(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//PubDate/Year"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublisher(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractPublisher(
+        self, xml_element: _Element
+    ) -> Union[str, None, int]:
         path = ".//Publisher/PublisherName"
         return getContent(element=xml_element, path=path)
 
     def _extractPublisherLocation(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//Publisher/PublisherLocation"
         return getContent(element=xml_element, path=path)
 
     def _extractAuthors(
-        self: object, xml_element: Element
+        self: object, xml_element: _Element
     ) -> List[dict[str, Union[str, None, int]]]:
         return [
             {
@@ -124,7 +127,7 @@ class PubMedBookArticle:
         ]
 
     def _extractSections(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> List[dict[str, Union[str, None, int]]]:
         return [
             {
@@ -136,7 +139,7 @@ class PubMedBookArticle:
             for section in xml_element.findall(".//Section")
         ]
 
-    def _initializeFromXML(self, xml_element: Element) -> None:
+    def _initializeFromXML(self, xml_element: _Element) -> None:
         """Parse an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)

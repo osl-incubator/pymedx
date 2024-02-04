@@ -3,12 +3,13 @@ import datetime
 import json
 
 from typing import Any, Dict, List, Optional, Union
-from xml.etree.ElementTree import Element
 
-from .helpers import getContent
+from lxml.etree import _Element
+
+from .helpers import getAllContent, getContent, getContentUnique
 
 
-class PubMedArticle(object):
+class PubMedArticle:
     """Data class that contains a PubMed article."""
 
     __slots__ = (
@@ -29,7 +30,7 @@ class PubMedArticle(object):
 
     def __init__(
         self,
-        xml_element: Optional[Element] = None,
+        xml_element: Optional[_Element] = None,
         *args: List[Any],
         **kwargs: Dict[Any, Any],
     ) -> None:
@@ -46,15 +47,15 @@ class PubMedArticle(object):
             for field in self.__slots__:
                 self.__setattr__(field, kwargs.get(field, None))
 
-    def _extractPubMedId(self, xml_element: Element) -> Union[str, None, int]:
-        path = ".//ArticleId[@IdType='pubmed']"
-        return getContent(element=xml_element, path=path)
+    def _extractPubMedId(self, xml_element: _Element) -> Union[str, None, int]:
+        path = ".//PMID"
+        return getContentUnique(element=xml_element, path=path)
 
-    def _extractTitle(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractTitle(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//ArticleTitle"
-        return getContent(element=xml_element, path=path)
+        return getAllContent(element=xml_element, path=path)
 
-    def _extractKeywords(self, xml_element: Element) -> List[Any]:
+    def _extractKeywords(self, xml_element: _Element) -> List[Any]:
         path = ".//Keyword"
         return [
             keyword.text
@@ -62,40 +63,40 @@ class PubMedArticle(object):
             if keyword is not None
         ]
 
-    def _extractJournal(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractJournal(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//Journal/Title"
         return getContent(element=xml_element, path=path)
 
-    def _extractAbstract(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractAbstract(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//AbstractText"
-        return getContent(element=xml_element, path=path)
+        return getAllContent(element=xml_element, path=path)
 
     def _extractConclusions(
-        self: object, xml_element: Element
+        self, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//AbstractText[@Label='CONCLUSION']"
         return getContent(element=xml_element, path=path)
 
-    def _extractMethods(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractMethods(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//AbstractText[@Label='METHOD']"
         return getContent(element=xml_element, path=path)
 
-    def _extractResults(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractResults(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//AbstractText[@Label='RESULTS']"
         return getContent(element=xml_element, path=path)
 
     def _extractCopyrights(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> Union[str, None, int]:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
-    def _extractDoi(self, xml_element: Element) -> Union[str, None, int]:
+    def _extractDoi(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//ArticleId[@IdType='doi']"
-        return getContent(element=xml_element, path=path)
+        return getContentUnique(element=xml_element, path=path)
 
     def _extractPublicationDate(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> Optional[datetime.date]:
         # Get the publication date
 
@@ -121,7 +122,7 @@ class PubMedArticle(object):
         return None
 
     def _extractAuthors(
-        self, xml_element: Element
+        self, xml_element: _Element
     ) -> List[dict[str, Union[str, None, int]]]:
         return [
             {
@@ -135,7 +136,7 @@ class PubMedArticle(object):
             for author in xml_element.findall(".//Author")
         ]
 
-    def _initializeFromXML(self, xml_element: Element) -> None:
+    def _initializeFromXML(self, xml_element: _Element) -> None:
         """Parse an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
@@ -162,7 +163,7 @@ class PubMedArticle(object):
             {
                 key: (
                     value
-                    if not isinstance(value, (datetime.date, Element))
+                    if not isinstance(value, (datetime.date, _Element))
                     else str(value)
                 )
                 for key, value in self.toDict().items()

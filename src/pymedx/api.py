@@ -1,11 +1,12 @@
 """API module for PubMed."""
 import datetime
 import itertools
-import xml.etree.ElementTree as xml
 
 from typing import Any, Dict, Iterable, List, Union, cast
 
 import requests
+
+from lxml import etree as xml
 
 from .article import PubMedArticle
 from .book import PubMedBookArticle
