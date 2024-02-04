@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.2.1](https://github.com/osl-incubator/pymedx/compare/0.2.0...0.2.1) (2024-02-04)
+
+
+### Bug Fixes
+
+* update scraping code ([#6](https://github.com/osl-incubator/pymedx/issues/6)) ([220f2bf](https://github.com/osl-incubator/pymedx/commit/220f2bfee1e98b56cf998c9d157bdc7526a3aff3))
+
 # [0.2.0](https://github.com/osl-incubator/pymedx/compare/0.1.1...0.2.0) (2024-02-01)
 
 
