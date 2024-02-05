@@ -8,7 +8,7 @@ import requests
 
 from lxml import etree as xml
 
-from .article import PubMedArticle
+from .article import PubMedArticle, PubMedArticleCentral
 from .book import PubMedBookArticle
 from .helpers import batches
 
@@ -65,7 +65,9 @@ class PubMed:
         min_date: str,
         max_date: str,
         max_results: int = 100,
-    ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+    ]:
         """
         Execute a query agains the GraphQL schema.
 
@@ -207,7 +209,9 @@ class PubMed:
 
     def _getArticles(
         self, article_ids: List[str]
-    ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+    ]:
         """Batch a list of article IDs and retrieves the content.
 
         Parameters
@@ -335,3 +339,74 @@ class PubMed:
 
         # Return the response
         return article_ids
+
+
+class PubMedCentral(PubMed):
+    """Warp around the PubMedCentral API."""
+
+    def __init__(
+        self,
+        tool: str = "my_tool",
+        email: str = "my_email@example.com",
+        api_key: str = "",
+    ) -> None:
+        """
+        Initialize the PubMedCentral object.
+
+        Parameters
+        ----------
+        tool: String
+            name of the tool that is executing the query.
+            This parameter is not required but kindly requested by
+            PMC (PubMed Central).
+        email: String
+            email of the user of the tool. This parameter
+            is not required but kindly requested by PMC (PubMed Central).
+        api_key: str
+            the NCBI API KEY
+
+        Returns
+        -------
+        None
+        """
+        # Inherits from PubMed object and initialize.
+        super().__init__(tool, email, api_key)
+        # Changes database source to pmc (PubMedCentral)
+        self.parameters["db"] = "pmc"
+
+    def _getArticles(
+        self, article_ids: List[str]
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+    ]:
+        """Batch a list of article IDs and retrieves the content.
+
+        Parameters
+        ----------
+            - article_ids   List, article IDs.
+
+        Returns
+        -------
+            - articles      List, article objects.
+        """
+        # Get the default parameters
+        parameters = self.parameters.copy()
+        parameters["id"] = article_ids
+
+        # Make the request
+        response = self._get(
+            url="/entrez/eutils/efetch.fcgi",
+            parameters=parameters,
+            output="xml",
+        )
+
+        # Parse as XML
+        root = xml.fromstring(response)
+
+        # Loop over the articles and construct article objects
+        for article in root.iter(
+            "PubmedCentralArticle"
+        ):  # change this to article check first
+            yield PubMedArticleCentral(xml_element=article)
+        # for book in root.iter("PubmedBookArticle"):
+        #     yield PubMedBookArticle(xml_element=book)

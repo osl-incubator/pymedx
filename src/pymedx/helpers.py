@@ -140,4 +140,4 @@ def getAllContent(
     )
 
     # Extract the text and return it
-    return result
+    return result.strip().replace("\n", " ")
