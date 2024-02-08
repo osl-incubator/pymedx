@@ -8,7 +8,7 @@ import requests
 
 from lxml import etree as xml
 
-from .article import PubMedArticle, PubMedArticleCentral
+from .article import PubMedArticle, PubMedCentralArticle
 from .book import PubMedBookArticle
 from .helpers import batches
 
@@ -66,7 +66,7 @@ class PubMed:
         max_date: str,
         max_results: int = 100,
     ) -> Iterable[
-        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
     ]:
         """
         Execute a query agains the GraphQL schema.
@@ -210,7 +210,7 @@ class PubMed:
     def _getArticles(
         self, article_ids: List[str]
     ) -> Iterable[
-        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
     ]:
         """Batch a list of article IDs and retrieves the content.
 
@@ -377,7 +377,7 @@ class PubMedCentral(PubMed):
     def _getArticles(
         self, article_ids: List[str]
     ) -> Iterable[
-        Union[PubMedArticle, PubMedBookArticle, PubMedArticleCentral]
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
     ]:
         """Batch a list of article IDs and retrieves the content.
 
@@ -405,8 +405,8 @@ class PubMedCentral(PubMed):
 
         # Loop over the articles and construct article objects
         for article in root.iter(
-            "PubmedCentralArticle"
+            "article"
         ):  # change this to article check first
-            yield PubMedArticleCentral(xml_element=article)
+            yield PubMedCentralArticle(xml_element=article)
         # for book in root.iter("PubmedBookArticle"):
         #     yield PubMedBookArticle(xml_element=book)

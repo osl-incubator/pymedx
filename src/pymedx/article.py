@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from lxml.etree import _Element
 
-from .helpers import getAllContent, getContent, getContentUnique
+from .helpers import getAbstract, getAllContent, getContent, getContentUnique
 
 
 class PubMedArticle:
@@ -69,7 +69,7 @@ class PubMedArticle:
 
     def _extractAbstract(self, xml_element: _Element) -> Union[str, None, int]:
         path = ".//AbstractText"
-        return getAllContent(element=xml_element, path=path)
+        return getAbstract(element=xml_element, path=path)
 
     def _extractConclusions(
         self, xml_element: _Element
@@ -173,7 +173,7 @@ class PubMedArticle:
         )
 
 
-class PubMedArticleCentral:
+class PubMedCentralArticle:
     """Data class that contains a PubMedCentral article."""
 
     # Full slots
@@ -270,7 +270,7 @@ class PubMedArticleCentral:
     #     return getContent(element=xml_element, path=path)
 
     def _extractDoi(self, xml_element: _Element) -> Union[str, None, int]:
-        path = ".//article-meta/article-id[@pub-id-type='doi']']"
+        path = ".//article-meta/article-id[@pub-id-type='doi']"
         return getContentUnique(element=xml_element, path=path)
 
     def _extractPublicationDate(
@@ -280,6 +280,10 @@ class PubMedArticleCentral:
 
         # Get the publication elements
         publication_date = xml_element.find(".//pub-date[@pub-type='epub']")
+
+        if not publication_date:  # Check this part
+            publication_date = xml_element.find(".//pub-date")
+
         if publication_date is not None:
             publication_year = getContent(
                 publication_date, ".//year", None
@@ -302,20 +306,23 @@ class PubMedArticleCentral:
     def _extractAuthors(
         self, xml_element: _Element
     ) -> List[dict[str, Union[str, None, int]]]:
-        contrib_group = xml_element.findall(".//contrib-group")[0]
-        return [
-            {
-                "lastname": getContent(author, ".//surname", None),
-                "firstname": getContent(author, ".//given-names", None),
-                # "initials": getContent(author, ".//Initials", None),
-                # "affiliation": getContent(
-                #     author, ".//AffiliationInfo/Affiliation", None
-                # ),
-            }
-            for author in contrib_group.findall(
-                ".//contrib[@contrib-type='author']"
-            )
-        ]
+        contrib_group = xml_element.findall(".//contrib-group")
+        print(contrib_group)
+        if contrib_group:
+            return [
+                {
+                    "lastname": getContent(author, ".//surname", None),
+                    "firstname": getContent(author, ".//given-names", None),
+                    # "initials": getContent(author, ".//Initials", None),
+                    # "affiliation": getContent(
+                    #     author, ".//AffiliationInfo/Affiliation", None
+                    # ),
+                }
+                for author in contrib_group[0].findall(
+                    ".//contrib[@contrib-type='author']"
+                )
+            ]
+        return []
 
     def _initializeFromXML(self, xml_element: _Element) -> None:
         """Parse an XML element into an article object."""
