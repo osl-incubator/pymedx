@@ -4,7 +4,7 @@ import os
 import pytest
 import requests_cache
 
-from pymedx.api import PubMed
+from pymedx.api import PubMed, PubMedCentral
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -38,3 +38,15 @@ def pubmed() -> PubMed:
         params["api_key"] = api_key
 
     return PubMed(**params)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pmc() -> PubMedCentral:
+    """Fixture to create a PubMed instance."""
+    params = dict(tool="TestTool", email="test@example.com")
+
+    api_key = os.getenv("NCBI_API_KEY", "")
+    if api_key:
+        params["api_key"] = api_key
+
+    return PubMedCentral(**params)
