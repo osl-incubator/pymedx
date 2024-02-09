@@ -1,35 +1,33 @@
 """Tests for the api module."""
 
 
-from pymedx.api import (
-    PubMed,
-)
+from pymedx.api import PubMedCentral
 
 
-class TestPubMed:
-    """Tests for PubMed."""
+class TestPubMedCentral:
+    """Tests for PubMedCentral."""
 
-    def test_initialization(self, pubmed: PubMed):
+    def test_initialization(self, pmc: PubMedCentral):
         """Test the initialization of the PubMed class."""
-        assert pubmed.tool == "TestTool"
-        assert pubmed.email == "test@example.com"
+        assert pmc.tool == "TestTool"
+        assert pmc.email == "test@example.com"
 
-    def test_rate_limit_not_exceeded(self, pubmed: PubMed):
+    def test_rate_limit_not_exceeded(self, pmc: PubMedCentral):
         """Test that the rate limit is not exceeded initially."""
-        assert not pubmed._exceededRateLimit()
+        assert not pmc._exceededRateLimit()
 
-    def test_query(self, pubmed: PubMed):
+    def test_query(self, pmc: PubMedCentral):
         """Test a simple query. This will hit the live PubMed API."""
         # Use a very specific query to limit results
-        articles = pubmed.query(
+        articles = pmc.query(
             query="COVID-19 vaccines",
             max_results=10,
         )
         articles = list(articles)  # Convert from generator to list
         assert len(articles) > 0  # Assert that we got some results
 
-    def test_get_total_results_count(self, pubmed: PubMed):
+    def test_get_total_results_count(self, pmc: PubMedCentral):
         """Test getting the total results count for a query."""
-        count = pubmed.getTotalResultsCount(query="COVID-19 vaccines")
+        count = pmc.getTotalResultsCount(query="COVID-19 vaccines")
         assert isinstance(count, int)
         assert count > 0  # Assert that the query matches some results

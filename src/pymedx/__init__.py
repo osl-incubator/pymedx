@@ -2,7 +2,7 @@
 """PyMedX package."""
 from importlib import metadata as importlib_metadata
 
-from .api import PubMed
+from .api import PubMed, PubMedCentral
 
 
 def get_version():
@@ -18,4 +18,4 @@ version = get_version()
 __version__ = version
 
 
-__all__ = ["PubMed", "__version__"]
+__all__ = ["PubMed", "PubMedCentral", "__version__"]

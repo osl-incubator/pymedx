@@ -8,7 +8,7 @@ import requests
 
 from lxml import etree as xml
 
-from .article import PubMedArticle
+from .article import PubMedArticle, PubMedCentralArticle
 from .book import PubMedBookArticle
 from .helpers import batches
 
@@ -62,10 +62,10 @@ class PubMed:
     def query(
         self,
         query: str,
-        min_date: str,
-        max_date: str,
         max_results: int = 100,
-    ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
+    ]:
         """
         Execute a query agains the GraphQL schema.
 
@@ -84,8 +84,6 @@ class PubMed:
         # Retrieve the article IDs for the query
         article_ids = self._getArticleIds(
             query=query,
-            min_date=min_date,
-            max_date=max_date,
             max_results=max_results,
         )
 
@@ -188,8 +186,7 @@ class PubMed:
 
         # Set the response mode
 
-        if parameters:
-            parameters["retmode"] = output
+        parameters["retmode"] = output
 
         # Make the request to PubMed
         response = requests.get(f"{BASE_URL}{url}", params=parameters)
@@ -207,7 +204,9 @@ class PubMed:
 
     def _getArticles(
         self, article_ids: List[str]
-    ) -> Iterable[Union[PubMedArticle, PubMedBookArticle]]:
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
+    ]:
         """Batch a list of article IDs and retrieves the content.
 
         Parameters
@@ -241,8 +240,6 @@ class PubMed:
     def _getArticleIds(
         self,
         query: str,
-        min_date: str,
-        max_date: str,
         max_results: int,
     ) -> List[str]:
         """Retrieve the article IDs for a query.
@@ -267,29 +264,19 @@ class PubMed:
 
         # Add specific query parameters
         parameters["term"] = query
-        parameters["retmax"] = 50000
+        parameters["retmax"] = 500000
         parameters["datetype"] = "edat"
-        parameters["mindate"] = min_date
-        parameters["maxdate"] = max_date
 
         retmax: int = cast(int, parameters["retmax"])
+
         # Calculate a cut off point based on the max_results parameter
         if max_results < retmax:
             parameters["retmax"] = max_results
 
-        new_url = (
-            "/entrez/eutils/esearch.fcgi?"
-            f"db={parameters['db']}&"
-            f"term={parameters['term']}&"
-            f"retmax={parameters['retmax']}&"
-            f"datetype={parameters['datetype']}&"
-            f"mindate={parameters['mindate']}&"
-            f"maxdate={parameters['maxdate']}&"
-            f"retmode=json"
-        )
-
         # Make the first request to PubMed
-        response: requests.models.Response = self._get(url=new_url)
+        response: requests.models.Response = self._get(
+            url="/entrez/eutils/esearch.fcgi", parameters=parameters
+        )
 
         # Add the retrieved IDs to the list
         article_ids += response.get("esearchresult", {}).get("idlist", [])
@@ -335,3 +322,74 @@ class PubMed:
 
         # Return the response
         return article_ids
+
+
+class PubMedCentral(PubMed):
+    """Warp around the PubMedCentral API."""
+
+    def __init__(
+        self,
+        tool: str = "my_tool",
+        email: str = "my_email@example.com",
+        api_key: str = "",
+    ) -> None:
+        """
+        Initialize the PubMedCentral object.
+
+        Parameters
+        ----------
+        tool: String
+            name of the tool that is executing the query.
+            This parameter is not required but kindly requested by
+            PMC (PubMed Central).
+        email: String
+            email of the user of the tool. This parameter
+            is not required but kindly requested by PMC (PubMed Central).
+        api_key: str
+            the NCBI API KEY
+
+        Returns
+        -------
+        None
+        """
+        # Inherits from PubMed object and initialize.
+        super().__init__(tool, email, api_key)
+        # Changes database source to pmc (PubMedCentral)
+        self.parameters["db"] = "pmc"
+
+    def _getArticles(
+        self, article_ids: List[str]
+    ) -> Iterable[
+        Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
+    ]:
+        """Batch a list of article IDs and retrieves the content.
+
+        Parameters
+        ----------
+            - article_ids   List, article IDs.
+
+        Returns
+        -------
+            - articles      List, article objects.
+        """
+        # Get the default parameters
+        parameters = self.parameters.copy()
+        parameters["id"] = article_ids
+
+        # Make the request
+        response = self._get(
+            url="/entrez/eutils/efetch.fcgi",
+            parameters=parameters,
+            output="xml",
+        )
+
+        # Parse as XML
+        root = xml.fromstring(response)
+
+        # Loop over the articles and construct article objects
+        for article in root.iter("article"):
+            yield PubMedCentralArticle(xml_element=article)
+
+        # TODO: Adapt to PubMed Central API
+        # for book in root.iter("PubmedBookArticle"):
+        #     yield PubMedBookArticle(xml_element=book)
