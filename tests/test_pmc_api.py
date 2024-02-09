@@ -4,8 +4,8 @@
 from pymedx.api import PubMedCentral
 
 
-class TestPubMed:
-    """Tests for PubMed."""
+class TestPubMedCentral:
+    """Tests for PubMedCentral."""
 
     def test_initialization(self, pmc: PubMedCentral):
         """Test the initialization of the PubMed class."""

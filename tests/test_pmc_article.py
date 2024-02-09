@@ -18,7 +18,7 @@ def sample_pmc_article(pmc):
 
 
 class TestArticle:
-    """Test article module."""
+    """Test PubMed Central article module."""
 
     def test_doi_length(self, sample_pmc_article):
         """Test that the DOI attribute has an expected length range."""
