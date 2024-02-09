@@ -21,5 +21,3 @@ class TestPMC:
         assert len(listed) > 0
         assert len(listed[0].title) > 0
         assert len(listed[0].pmc_id) > 0
-
-
