@@ -190,8 +190,6 @@ class PubMed:
 
         # Make the request to PubMed
         response = requests.get(f"{BASE_URL}{url}", params=parameters)
-        print("----------- requests")
-        print(response.url)
         # Check for any errors
         response.raise_for_status()
 
