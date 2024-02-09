@@ -468,6 +468,54 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral" class="md-nav__link">
+    <span class="md-ellipsis">
+      PubMedCentral
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PubMedCentral">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral._getArticles" class="md-nav__link">
+    <span class="md-ellipsis">
+      _getArticles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -634,6 +682,54 @@
   <a href="#pymedx.PubMed.query" class="md-nav__link">
     <span class="md-ellipsis">
       query
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral" class="md-nav__link">
+    <span class="md-ellipsis">
+      PubMedCentral
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PubMedCentral">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral._getArticles" class="md-nav__link">
+    <span class="md-ellipsis">
+      _getArticles
     </span>
   </a>
   
@@ -1015,7 +1111,7 @@ returend</p>
 
 
 <h6 id="pymedx.PubMed._getArticleIds" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">_getArticleIds</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">min_date</span><span class="p">,</span> <span class="n">max_date</span><span class="p">,</span> <span class="n">max_results</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">_getArticleIds</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="p">)</span></code>
 
 </h6>
 
@@ -1218,7 +1314,7 @@ returend</p>
 
 
 <h6 id="pymedx.PubMed.query" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">min_date</span><span class="p">,</span> <span class="n">max_date</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span></code>
 
 </h6>
 
@@ -1276,6 +1372,193 @@ returend</p>
           <td>
             <div class="doc-md-description">
               <p>GraphQL object that contains the result in the "data" attribute.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="pymedx.PubMedCentral" class="doc doc-heading">
+          <code>PubMedCentral</code>
+
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pymedx.api.PubMed" href="#pymedx.PubMed">PubMed</a></code></p>
+
+  
+      <p>Warp around the PubMedCentral API.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<h5 id="pymedx.PubMedCentral-functions">Functions</h5>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h6 id="pymedx.PubMedCentral.__init__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">tool</span><span class="o">=</span><span class="s1">&#39;my_tool&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s1">&#39;my_email@example.com&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
+
+</h6>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Initialize the PubMedCentral object.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>tool</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>name of the tool that is executing the query.
+This parameter is not required but kindly requested by
+PMC (PubMed Central).</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;my_tool&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>email</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>email of the user of the tool. This parameter
+is not required but kindly requested by PMC (PubMed Central).</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;my_email@example.com&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>api_key</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>the NCBI API KEY</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h6 id="pymedx.PubMedCentral._getArticles" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">_getArticles</span><span class="p">(</span><span class="n">article_ids</span><span class="p">)</span></code>
+
+</h6>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Batch a list of article IDs and retrieves the content.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>    - articles      List, article objects.</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              
             </div>
           </td>
         </tr>

@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.3.0](https://github.com/osl-incubator/pymedx/compare/0.2.1...0.3.0) (2024-02-09)
+
+
+### Features
+
+* add pmc as a source for fetching articles data ([#7](https://github.com/osl-incubator/pymedx/issues/7)) ([3bb3536](https://github.com/osl-incubator/pymedx/commit/3bb353627e3f9db0300f73d0084f174e0fedd48e))
+
 ## [0.2.1](https://github.com/osl-incubator/pymedx/compare/0.2.0...0.2.1) (2024-02-04)
 
 
