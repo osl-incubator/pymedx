@@ -194,6 +194,8 @@ class PubMedCentralArticle:
         "xml",
     )
     """
+
+    # slots which have been implemented
     __slots__ = (
         "pmc_id",
         "title",
@@ -230,6 +232,7 @@ class PubMedCentralArticle:
         path = ".//title-group"
         return getAllContent(element=xml_element, path=path)
 
+    # TODO: adapt the function for PubMed Central
     # def _extractKeywords(self, xml_element: _Element) -> List[Any]:
     #     path = ".//Keyword"
     #     return [
@@ -237,7 +240,7 @@ class PubMedCentralArticle:
     #         for keyword in xml_element.findall(path)
     #         if keyword is not None
     #     ]
-
+    # TODO: adapt the function for PubMed Central
     # def _extractJournal
     # (self, xml_element: _Element) -> Union[str, None, int]:
     #     path = ".//Journal/Title"
@@ -247,22 +250,23 @@ class PubMedCentralArticle:
         path = ".//abstract"
         return getAllContent(element=xml_element, path=path)
 
+    # TODO: adapt the function for PubMed Central
     # def _extractConclusions(
     #     self, xml_element: _Element
     # ) -> Union[str, None, int]:
     #     path = ".//AbstractText[@Label='CONCLUSION']"
     #     return getContent(element=xml_element, path=path)
-
+    # TODO: adapt the function for PubMed Central
     # def _extractMethods(self, xml_element: _Element)
     # -> Union[str, None, int]:
     #     path = ".//AbstractText[@Label='METHOD']"
     #     return getContent(element=xml_element, path=path)
-
+    # TODO: adapt the function for PubMed Central
     # def _extractResults(self, xml_element: _Element)
     # -> Union[str, None, int]:
     #     path = ".//AbstractText[@Label='RESULTS']"
     #     return getContent(element=xml_element, path=path)
-
+    # TODO: adapt the function for PubMed Central
     # def _extractCopyrights(
     #     self, xml_element: _Element
     # ) -> Union[str, None, int]:
@@ -285,9 +289,7 @@ class PubMedCentralArticle:
             publication_date = xml_element.find(".//pub-date")
 
         if publication_date is not None:
-            publication_year = getContent(
-                publication_date, ".//year", None
-            )  # None?
+            publication_year = getContent(publication_date, ".//year", None)
 
             publication_month = getContent(publication_date, ".//month", "1")
 
@@ -307,12 +309,12 @@ class PubMedCentralArticle:
         self, xml_element: _Element
     ) -> List[dict[str, Union[str, None, int]]]:
         contrib_group = xml_element.findall(".//contrib-group")
-        print(contrib_group)
         if contrib_group:
             return [
                 {
                     "lastname": getContent(author, ".//surname", None),
                     "firstname": getContent(author, ".//given-names", None),
+                    # TODO: adapt the function for PubMed Central
                     # "initials": getContent(author, ".//Initials", None),
                     # "affiliation": getContent(
                     #     author, ".//AffiliationInfo/Affiliation", None
@@ -329,17 +331,18 @@ class PubMedCentralArticle:
         # Parse the different fields of the article
         self.pmc_id = self._extractPMCId(xml_element)
         self.title = self._extractTitle(xml_element)
+        self.abstract = self._extractAbstract(xml_element)
+        self.doi = self._extractDoi(xml_element)
+        self.publication_date = self._extractPublicationDate(xml_element)
+        self.authors = self._extractAuthors(xml_element)
+        # TODO: adapt the function for PubMed Central
+        # self.xml = xml_element
         # self.keywords = self._extractKeywords(xml_element)
         # self.journal = self._extractJournal(xml_element)
-        self.abstract = self._extractAbstract(xml_element)
         # self.conclusions = self._extractConclusions(xml_element)
         # self.methods = self._extractMethods(xml_element)
         # self.results = self._extractResults(xml_element)
         # self.copyrights = self._extractCopyrights(xml_element)
-        self.doi = self._extractDoi(xml_element)
-        self.publication_date = self._extractPublicationDate(xml_element)
-        self.authors = self._extractAuthors(xml_element)
-        # self.xml = xml_element
 
     def toDict(self) -> Dict[Any, Any]:
         """Convert the parsed information to a Python dict."""

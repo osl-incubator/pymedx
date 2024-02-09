@@ -10,9 +10,7 @@ DOI_LEN_MAX = 255
 @pytest.fixture(scope="module")
 def sample_article(pubmed):
     """Fixture to create a PubMedArticle instance from dynamic XML."""
-    article_ids = pubmed.query(
-        "COVID-19 vaccines", "2021-01-01", "2021-01-31", max_results=10
-    )
+    article_ids = pubmed.query("COVID-19 vaccines", max_results=10)
     article_ids = list(article_ids)
 
     articles = pubmed._getArticles(article_ids[:1])

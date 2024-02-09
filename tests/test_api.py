@@ -23,8 +23,6 @@ class TestPubMed:
         # Use a very specific query to limit results
         articles = pubmed.query(
             query="COVID-19 vaccines",
-            min_date="2021-01-01",
-            max_date="2021-01-31",
             max_results=10,
         )
         articles = list(articles)  # Convert from generator to list

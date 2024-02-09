@@ -62,8 +62,6 @@ class PubMed:
     def query(
         self,
         query: str,
-        min_date: str,
-        max_date: str,
         max_results: int = 100,
     ) -> Iterable[
         Union[PubMedArticle, PubMedBookArticle, PubMedCentralArticle]
@@ -86,8 +84,6 @@ class PubMed:
         # Retrieve the article IDs for the query
         article_ids = self._getArticleIds(
             query=query,
-            min_date=min_date,
-            max_date=max_date,
             max_results=max_results,
         )
 
@@ -190,11 +186,12 @@ class PubMed:
 
         # Set the response mode
 
-        if parameters:
-            parameters["retmode"] = output
+        parameters["retmode"] = output
 
         # Make the request to PubMed
         response = requests.get(f"{BASE_URL}{url}", params=parameters)
+        print("----------- requests")
+        print(response.url)
         # Check for any errors
         response.raise_for_status()
 
@@ -245,8 +242,6 @@ class PubMed:
     def _getArticleIds(
         self,
         query: str,
-        min_date: str,
-        max_date: str,
         max_results: int,
     ) -> List[str]:
         """Retrieve the article IDs for a query.
@@ -271,29 +266,19 @@ class PubMed:
 
         # Add specific query parameters
         parameters["term"] = query
-        parameters["retmax"] = 50000
+        parameters["retmax"] = 500000
         parameters["datetype"] = "edat"
-        parameters["mindate"] = min_date
-        parameters["maxdate"] = max_date
 
         retmax: int = cast(int, parameters["retmax"])
+
         # Calculate a cut off point based on the max_results parameter
         if max_results < retmax:
             parameters["retmax"] = max_results
 
-        new_url = (
-            "/entrez/eutils/esearch.fcgi?"
-            f"db={parameters['db']}&"
-            f"term={parameters['term']}&"
-            f"retmax={parameters['retmax']}&"
-            f"datetype={parameters['datetype']}&"
-            f"mindate={parameters['mindate']}&"
-            f"maxdate={parameters['maxdate']}&"
-            f"retmode=json"
-        )
-
         # Make the first request to PubMed
-        response: requests.models.Response = self._get(url=new_url)
+        response: requests.models.Response = self._get(
+            url="/entrez/eutils/esearch.fcgi", parameters=parameters
+        )
 
         # Add the retrieved IDs to the list
         article_ids += response.get("esearchresult", {}).get("idlist", [])
@@ -404,9 +389,9 @@ class PubMedCentral(PubMed):
         root = xml.fromstring(response)
 
         # Loop over the articles and construct article objects
-        for article in root.iter(
-            "article"
-        ):  # change this to article check first
+        for article in root.iter("article"):
             yield PubMedCentralArticle(xml_element=article)
+
+        # TODO: Adapt to PubMed Central API
         # for book in root.iter("PubmedBookArticle"):
         #     yield PubMedBookArticle(xml_element=book)
