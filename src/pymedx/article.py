@@ -291,13 +291,18 @@ class PubMedCentralArticle:
         if publication_date is not None:
             publication_year = getContent(publication_date, ".//year", None)
 
+            if publication_year is None:
+                return None
+
             publication_month = getContent(publication_date, ".//month", "1")
 
             publication_day = getContent(publication_date, ".//day", "1")
 
             # Construct a datetime object from the info
             date_str: str = (
-                f"{publication_year}/{publication_month}/{publication_day}"
+                f"{str(publication_year).strip()}/"
+                f"{str(publication_month).strip()}/"
+                f"{str(publication_day).strip()}"
             )
 
             return datetime.datetime.strptime(date_str, "%Y/%m/%d")
