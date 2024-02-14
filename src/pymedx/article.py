@@ -285,13 +285,13 @@ class PubMedCentralArticle:
         # Get the publication elements
         publication_date = xml_element.find(".//pub-date[@pub-type='epub']")
 
-        if not publication_date:  # Check this part
+        if publication_date is None:
             publication_date = xml_element.find(".//pub-date")
 
         if publication_date is not None:
             publication_year = getContent(publication_date, ".//year", None)
 
-            if publication_year is None:
+            if not publication_year or publication_year is None:
                 return None
 
             publication_month = getContent(publication_date, ".//month", "1")
