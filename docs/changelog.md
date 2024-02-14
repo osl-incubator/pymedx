@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.3.1](https://github.com/osl-incubator/pymedx/compare/0.3.0...0.3.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* solve bug in extracting date from pmc source ([#9](https://github.com/osl-incubator/pymedx/issues/9)) ([20dd44e](https://github.com/osl-incubator/pymedx/commit/20dd44ed2f650d10738310c9847c8932f919ea39))
+
 # [0.3.0](https://github.com/osl-incubator/pymedx/compare/0.2.1...0.3.0) (2024-02-09)
 
 
