@@ -285,11 +285,14 @@ class PubMedCentralArticle:
         # Get the publication elements
         publication_date = xml_element.find(".//pub-date[@pub-type='epub']")
 
-        if not publication_date:  # Check this part
+        if publication_date is None:
             publication_date = xml_element.find(".//pub-date")
 
         if publication_date is not None:
             publication_year = getContent(publication_date, ".//year", None)
+
+            if not publication_year or publication_year is None:
+                return None
 
             publication_month = getContent(publication_date, ".//month", "1")
 
@@ -297,7 +300,9 @@ class PubMedCentralArticle:
 
             # Construct a datetime object from the info
             date_str: str = (
-                f"{publication_year}/{publication_month}/{publication_day}"
+                f"{str(publication_year).strip()}/"
+                f"{str(publication_month).strip()}/"
+                f"{str(publication_day).strip()}"
             )
 
             return datetime.datetime.strptime(date_str, "%Y/%m/%d")
