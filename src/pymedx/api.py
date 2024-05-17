@@ -1,6 +1,8 @@
 """API module for PubMed."""
 import datetime
 import itertools
+import random
+import time
 
 from typing import Any, Dict, Iterable, List, Union, cast
 
@@ -50,6 +52,7 @@ class PubMed:
 
         # Keep track of the rate limit
         self._rateLimit: int = 3
+        self._maxRetries: int = 10
         self._requestsMade: List[datetime.datetime] = []
         self.parameters: Dict[str, Union[str, int, List[str]]]
         # Define the standard / default query parameters
@@ -154,6 +157,23 @@ class PubMed:
         # than the rate limit
         return len(self._requestsMade) > self._rateLimit
 
+    def _wait_to_retry(self, attempt: int) -> None:
+        """
+        Calculate and wait the appropriate amount of time before a retry.
+
+        Parameters.
+        ----------
+        attempt: int
+            The current attempt number.
+        """
+        backoff_time = min(
+            2**attempt, 32
+        )  # Exponential backoff, capped at 32 seconds
+
+        backoff_time += random.uniform(0, 1)  # Add jitter
+
+        time.sleep(backoff_time)
+
     def _get(
         self,
         url: str,
@@ -180,27 +200,38 @@ class PubMed:
                             be parsed before returning, otherwise a string is
                             returend
         """
-        # Make sure the rate limit is not exceeded
+        attempt = 0
+
         while self._exceededRateLimit():
             pass
 
-        # Set the response mode
+        while attempt < self._maxRetries:
+            try:
+                # Set the response mode
+                parameters["retmode"] = output
 
-        parameters["retmode"] = output
+                # Make the request to PubMed
+                response = requests.get(f"{BASE_URL}{url}", params=parameters)
+                # Check for any errors
+                response.raise_for_status()
 
-        # Make the request to PubMed
-        response = requests.get(f"{BASE_URL}{url}", params=parameters)
-        # Check for any errors
-        response.raise_for_status()
+                # Add this request to the list of requests made
+                self._requestsMade.append(datetime.datetime.now())
 
-        # Add this request to the list of requests made
-        self._requestsMade.append(datetime.datetime.now())
+                # Return the response
+                if output == "json":
+                    return response.json()
+                else:
+                    return response.text
 
-        # Return the response
-        if output == "json":
-            return response.json()
-        else:
-            return response.text
+            except Exception:
+                self._wait_to_retry(attempt)
+                attempt += 1
+
+        raise Exception(
+            f"Failed to retrieve data from {BASE_URL}{url} "
+            f"after {self._maxRetries} attempts"
+        )
 
     def _getArticles(
         self, article_ids: List[str]
