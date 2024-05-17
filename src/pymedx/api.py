@@ -1,6 +1,7 @@
 """API module for PubMed."""
 import datetime
 import itertools
+import random
 import time
 
 from typing import Any, Dict, Iterable, List, Union, cast
@@ -168,6 +169,8 @@ class PubMed:
         backoff_time = min(
             2**attempt, 32
         )  # Exponential backoff, capped at 32 seconds
+
+        backoff_time += random.uniform(0, 1)  # Add jitter
 
         time.sleep(backoff_time)
 
