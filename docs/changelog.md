@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.4.0](https://github.com/osl-incubator/pymedx/compare/0.3.1...0.4.0) (2024-05-17)
+
+
+### Features
+
+* add exponential backoff ([#13](https://github.com/osl-incubator/pymedx/issues/13)) ([42cf7c3](https://github.com/osl-incubator/pymedx/commit/42cf7c3c57057cf11e07ccabce9292e1aa0d1052))
+
 ## [0.3.1](https://github.com/osl-incubator/pymedx/compare/0.3.0...0.3.1) (2024-02-14)
 
 
