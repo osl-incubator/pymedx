@@ -98,6 +98,8 @@ class PubMed:
 
         total_articles = self.getTotalResultsCount(query)
 
+        # check if total articles is greater than MAX_RECORDS_PM
+        # and check it the user requests more than MAX_RECORDS_PM
         if total_articles > MAX_RECORDS_PM and max_results > MAX_RECORDS_PM:
             article_ids = self._getArticleIdsMore10k(query=query)
 
@@ -273,7 +275,8 @@ class PubMed:
                 f"Your query: {query} returns more than 9 999 results. "
                 "PubMed database can only retrieve 9 999 records matching "
                 "the query. "
-                "Consider adding range date restriction to your query "
+                "Consider reducing the value of max_result to less than 9999"
+                "or adding range date restriction to your query "
                 " in the following format: \n"
                 '(<your query>) AND ("YYYY/MM/DD"[Date - Publication]'
                 ' : "YYYY/MM/DD"[Date - Publication])'
