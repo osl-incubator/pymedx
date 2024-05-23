@@ -95,9 +95,10 @@ class PubMed:
             GraphQL object that contains the result in the "data" attribute.
         """
         # Retrieve the article IDs for the query
+
         total_articles = self.getTotalResultsCount(query)
 
-        if total_articles > MAX_RECORDS_PM:
+        if total_articles > MAX_RECORDS_PM and max_results > MAX_RECORDS_PM:
             article_ids = self._getArticleIdsMore10k(query=query)
 
         else:
