@@ -99,7 +99,7 @@ class PubMed:
         total_articles = self.getTotalResultsCount(query)
 
         # check if total articles is greater than MAX_RECORDS_PM
-        # and check it the user requests more than MAX_RECORDS_PM
+        # and check if the user requests more than MAX_RECORDS_PM
         if total_articles > MAX_RECORDS_PM and max_results > MAX_RECORDS_PM:
             article_ids = self._getArticleIdsMore10k(query=query)
 
