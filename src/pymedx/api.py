@@ -307,8 +307,6 @@ class PubMed:
                 article_ids += self._getArticleIds(
                     query=arranged_query, max_results=MAX_RECORDS_PM
                 )
-            print("------------ len articles id")
-            print(len(article_ids))
 
         # Remove duplicated ids
         article_ids = list(set(article_ids))
