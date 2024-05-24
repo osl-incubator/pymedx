@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.5.0](https://github.com/osl-incubator/pymedx/compare/0.4.0...0.5.0) (2024-05-24)
+
+
+### Features
+
+* allow pymedx to retrieve more than 10k articles from PubMed database ([#14](https://github.com/osl-incubator/pymedx/issues/14)) ([013f0d0](https://github.com/osl-incubator/pymedx/commit/013f0d0ebac16cf79032e58c05c37368d36410e1))
+
 # [0.4.0](https://github.com/osl-incubator/pymedx/compare/0.3.1...0.4.0) (2024-05-17)
 
 

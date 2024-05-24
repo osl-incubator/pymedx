@@ -507,9 +507,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral._getArticleIds" class="md-nav__link">
+    <span class="md-ellipsis">
+      _getArticleIds
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pymedx.PubMedCentral._getArticles" class="md-nav__link">
     <span class="md-ellipsis">
       _getArticles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral.query" class="md-nav__link">
+    <span class="md-ellipsis">
+      query
     </span>
   </a>
   
@@ -745,9 +763,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral._getArticleIds" class="md-nav__link">
+    <span class="md-ellipsis">
+      _getArticleIds
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pymedx.PubMedCentral._getArticles" class="md-nav__link">
     <span class="md-ellipsis">
       _getArticles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pymedx.PubMedCentral.query" class="md-nav__link">
+    <span class="md-ellipsis">
+      query
     </span>
   </a>
   
@@ -1065,7 +1101,7 @@ be combined with the base url)</p>
         <tr>
           <td><code>parameters</code></td>
           <td>
-                <code><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a>[<a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>, <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a>[<a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>, <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1195,7 +1231,7 @@ returend</p>
     <tbody>
         <tr>
 <td><code>article_ids</code></td>          <td>
-                <code><a class="autorefs autorefs-external" title="typing.List" href="https://docs.python.org/3/library/typing.html#typing.List">List</a></code>
+                <code>List</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1572,6 +1608,93 @@ is not required but kindly requested by PMC (PubMed Central).</p>
 
 
 
+<h6 id="pymedx.PubMedCentral._getArticleIds" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">_getArticleIds</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="p">)</span></code>
+
+</h6>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Retrieve the article IDs for a query.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>query</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>query to be executed against the PubMed database.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>max_results</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>the maximum number of results to retrieve.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>article_ids</code></td>          <td>
+                <code>List</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>article IDs as a list.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
 <h6 id="pymedx.PubMedCentral._getArticles" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">_getArticles</span><span class="p">(</span><span class="n">article_ids</span><span class="p">)</span></code>
 
@@ -1600,6 +1723,80 @@ is not required but kindly requested by PMC (PubMed Central).</p>
           <td>
             <div class="doc-md-description">
               
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h6 id="pymedx.PubMedCentral.query" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span></code>
+
+</h6>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Execute a query agains the GraphQL schema.</p>
+<p>Automatically inserting the PubMed data loader.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>query</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>the GraphQL query to execute against the schema.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>result</code></td>          <td>
+                <code>ExecutionResult</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>GraphQL object that contains the result in the "data" attribute.</p>
             </div>
           </td>
         </tr>
