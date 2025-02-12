@@ -10,3 +10,4 @@ dependencies:
   - shellcheck
   - pip:
       - paginate
+      - levenshtein==0.25.1  # pep517

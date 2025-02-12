@@ -21,7 +21,8 @@ dependencies = [
   "requests (>=2.20.0)",
   "lxml (>=5.1.0)",
 ]
-
+asdfasdfasdf fddidifjj dfidijfasdfasdf
+kdkfkdf mmqikkdk kieiekdk
 [tool.poetry.group.dev.dependencies]
 python = ">3.9,<4"
 python-dotenv = ">=1.0"
