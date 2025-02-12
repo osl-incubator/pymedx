@@ -1,4 +1,5 @@
 """Test for the article module."""
+
 import datetime
 
 import pytest

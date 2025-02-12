@@ -1,4 +1,5 @@
 """Tests for the book module."""
+
 import datetime
 
 import pytest

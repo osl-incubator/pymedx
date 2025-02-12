@@ -25,9 +25,9 @@ class TestHelpers:
         generated_batches = list(batches(input_list, batch_size))
 
         # Verify
-        assert (
-            generated_batches == expected_batches
-        ), "Batches not generated as expected."
+        assert generated_batches == expected_batches, (
+            "Batches not generated as expected."
+        )
 
     def test_get_content(self):
         """Test the getContent function."""

@@ -1,6 +1,5 @@
 """Tests for the api module."""
 
-
 from pymedx.api import (
     PubMed,
 )
