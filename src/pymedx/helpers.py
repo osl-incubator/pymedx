@@ -1,4 +1,5 @@
 """Module for helper functions."""
+
 from __future__ import annotations
 
 import datetime
@@ -127,8 +128,7 @@ def get_range_months(
         current_end_date = next_month - datetime.timedelta(days=next_month.day)
 
         # Adjust the end date if it goes beyond the specified end_date
-        if current_end_date > end_date:
-            current_end_date = end_date
+        current_end_date = min(current_end_date, end_date)
 
         date_ranges.append((current_start_date, current_end_date))
 

@@ -3,10 +3,12 @@ channels:
   - nodefaults
   - conda-forge
 dependencies:
-  - python >=3.8.1,<4
+  - compilers
+  - python
   - pip
-  - poetry
+  - poetry >=2
   - nodejs # used by semantic-release
   - shellcheck
   - pip:
       - paginate
+      - levenshtein==0.25.1 # pep517

@@ -1,4 +1,5 @@
 """Module for handling articles."""
+
 import datetime
 import json
 
@@ -13,18 +14,18 @@ class PubMedArticle:
     """Data class that contains a PubMed article."""
 
     __slots__ = (
-        "pubmed_id",
-        "title",
         "abstract",
-        "keywords",
-        "journal",
-        "publication_date",
         "authors",
-        "methods",
         "conclusions",
-        "results",
         "copyrights",
         "doi",
+        "journal",
+        "keywords",
+        "methods",
+        "publication_date",
+        "pubmed_id",
+        "results",
+        "title",
         "xml",
     )
 
@@ -197,12 +198,12 @@ class PubMedCentralArticle:
 
     # slots which have been implemented
     __slots__ = (
-        "pmc_id",
-        "title",
         "abstract",
-        "publication_date",
         "authors",
         "doi",
+        "pmc_id",
+        "publication_date",
+        "title",
     )
 
     def __init__(

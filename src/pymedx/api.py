@@ -1,4 +1,5 @@
 """API module for PubMed."""
+
 from __future__ import annotations
 
 import datetime

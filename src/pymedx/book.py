@@ -1,4 +1,5 @@
 """Module for functions about book article."""
+
 import datetime
 import json
 
@@ -13,19 +14,19 @@ class PubMedBookArticle:
     """Data class that contains a PubMed article."""
 
     __slots__ = (
-        "pubmed_id",
-        "title",
         "abstract",
-        "publication_date",
         "authors",
         "copyrights",
         "doi",
         "isbn",
         "language",
+        "publication_date",
         "publication_type",
-        "sections",
         "publisher",
         "publisher_location",
+        "pubmed_id",
+        "sections",
+        "title",
     )
 
     def __init__(
