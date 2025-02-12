@@ -1,8 +1,12 @@
 """Configuration for the tests."""
 import os
 
+from pathlib import Path
+
 import pytest
 import requests_cache
+
+from dotenv import dotenv_values, load_dotenv
 
 from pymedx.api import PubMed, PubMedCentral
 
@@ -28,8 +32,16 @@ def setup_request_cache():
     # requests_cache doesn't require special teardown
 
 
+@pytest.fixture
+def env() -> dict[str, str]:
+    """Return a fixture for the environment variables from .env."""
+    dotenv_file = Path(__file__).parent / '.env'
+    load_dotenv(dotenv_file)
+    return dotenv_values(dotenv_file)
+
+
 @pytest.fixture(scope="session", autouse=True)
-def pubmed() -> PubMed:
+def pubmed(env) -> PubMed:
     """Fixture to create a PubMed instance."""
     params = dict(tool="TestTool", email="test@example.com")
 
@@ -41,7 +53,7 @@ def pubmed() -> PubMed:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def pmc() -> PubMedCentral:
+def pmc(env) -> PubMedCentral:
     """Fixture to create a PubMed instance."""
     params = dict(tool="TestTool", email="test@example.com")
 
