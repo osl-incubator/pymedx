@@ -39,7 +39,7 @@ def env() -> dict[str, str]:
     dotenv_file = Path(__file__).parent / ".env"
     if dotenv_file.exists():
         load_dotenv(dotenv_file)
-        return cast(Dict[str, str], dotenv_values(dotenv_file))
+        return cast(Dict[str, str], dotenv_values(dotenv_file) or {})
     return {}
 
 
