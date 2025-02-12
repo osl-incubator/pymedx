@@ -9,7 +9,7 @@ authors = [
   { name = "Ever Vino", email = "evervino00@gmail.com" },
 ]
 packages = [
-  {include = "pymedx", from="src"},
+  {include = "pymedx", from = "src"},
 ]
 license = "MIT"
 exclude = [
@@ -21,8 +21,11 @@ dependencies = [
   "requests (>=2.20.0)",
   "lxml (>=5.1.0)",
 ]
-asdfasdfasdf fddidifjj dfidijfasdfasdf
-kdkfkdf mmqikkdk kieiekdk
+
+[build-system]
+requires = ["poetry-core>=2", "poetry>=2"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry.group.dev.dependencies]
 python = ">3.9,<4"
 python-dotenv = ">=1.0"
