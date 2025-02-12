@@ -32,12 +32,14 @@ def setup_request_cache():
     # requests_cache doesn't require special teardown
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def env() -> dict[str, str]:
     """Return a fixture for the environment variables from .env."""
     dotenv_file = Path(__file__).parent / ".env"
-    load_dotenv(dotenv_file)
-    return dotenv_values(dotenv_file)
+    if dotenv_file.exists():
+        load_dotenv(dotenv_file)
+        return dotenv_values(dotenv_file)
+    return {}
 
 
 @pytest.fixture(scope="session", autouse=True)
