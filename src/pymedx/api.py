@@ -7,11 +7,13 @@ import itertools
 import random
 import time
 
-from typing import Any, Iterable, cast
+from copy import copy
+from typing import Any, Dict, Generator, Iterable, Iterator, cast
 
 import requests
 
 from lxml import etree as xml
+from typeguard import typechecked
 
 from .article import PubMedArticle, PubMedCentralArticle
 from .book import PubMedBookArticle
@@ -31,6 +33,7 @@ BASE_URL = "https://eutils.ncbi.nlm.nih.gov"
 MAX_RECORDS_PM = 9999
 
 
+@typechecked
 class PubMed:
     """Wrap around the PubMed API."""
 
@@ -79,7 +82,7 @@ class PubMed:
         self,
         query: str,
         max_results: int = 100,
-    ) -> Iterable[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
+    ) -> Iterator[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
         """
         Execute a query agains the GraphQL schema.
 
@@ -103,12 +106,12 @@ class PubMed:
         # and check if the user requests more than MAX_RECORDS_PM
         if total_articles > MAX_RECORDS_PM and max_results > MAX_RECORDS_PM:
             article_ids = self._getArticleIdsMore10k(query=query)
-
         else:
             article_ids = self._getArticleIds(
                 query=query,
                 max_results=max_results,
             )
+
         # Get the articles themselves
         articles = list(
             [
@@ -142,8 +145,13 @@ class PubMed:
         parameters["retmax"] = 1
 
         # Make the request (request a single article ID for this search)
-        response: requests.models.Response = self._get(
-            url="/entrez/eutils/esearch.fcgi", parameters=parameters
+        response = cast(
+            Dict[str, Any],
+            self._get(
+                url="/entrez/eutils/esearch.fcgi",
+                parameters=parameters,
+                output="json",
+            ),
         )
 
         # Get from the returned meta data the total number of available
@@ -196,9 +204,9 @@ class PubMed:
     def _get(
         self,
         url: str,
-        parameters: dict[Any, Any] = dict(),
+        parameters: dict[Any, Any] = {},
         output: str = "json",
-    ) -> str | requests.models.Response:
+    ) -> str | dict[str, Any]:
         """
         Make a request to PubMed.
 
@@ -219,6 +227,7 @@ class PubMed:
                             be parsed before returning, otherwise a string is
                             returend
         """
+        parameters = copy(parameters)
         attempt = 0
 
         while self._exceededRateLimit():
@@ -320,7 +329,9 @@ class PubMed:
 
     def _getArticles(
         self, article_ids: list[str]
-    ) -> Iterable[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
+    ) -> Generator[
+        PubMedArticle | PubMedBookArticle | PubMedCentralArticle, None, None
+    ]:
         """Batch a list of article IDs and retrieves the content.
 
         Parameters
@@ -336,10 +347,13 @@ class PubMed:
         parameters["id"] = article_ids
 
         # Make the request
-        response = self._get(
-            url="/entrez/eutils/efetch.fcgi",
-            parameters=parameters,
-            output="xml",
+        response = cast(
+            str,
+            self._get(
+                url="/entrez/eutils/efetch.fcgi",
+                parameters=parameters,
+                output="xml",
+            ),
         )
 
         # Parse as XML
@@ -388,8 +402,13 @@ class PubMed:
             parameters["retmax"] = max_results
 
         # Make the first request to PubMed
-        response: requests.models.Response = self._get(
-            url="/entrez/eutils/esearch.fcgi", parameters=parameters
+        response = cast(
+            Dict[str, Any],
+            self._get(
+                url="/entrez/eutils/esearch.fcgi",
+                parameters=parameters,
+                output="json",
+            ),
         )
 
         # Add the retrieved IDs to the list
@@ -422,8 +441,13 @@ class PubMed:
             parameters["retstart"] = retrieved_count
 
             # Make a new request
-            response = self._get(
-                url="/entrez/eutils/esearch.fcgi", parameters=parameters
+            response = cast(
+                Dict[str, Any],
+                self._get(
+                    url="/entrez/eutils/esearch.fcgi",
+                    parameters=parameters,
+                    output="json",
+                ),
             )
 
             # Add the retrieved IDs to the list
@@ -438,6 +462,7 @@ class PubMed:
         return article_ids
 
 
+@typechecked
 class PubMedCentral(PubMed):
     """Warp around the PubMedCentral API."""
 
@@ -545,8 +570,13 @@ class PubMedCentral(PubMed):
             parameters["retmax"] = max_results
 
         # Make the first request to PubMed
-        response: requests.models.Response = self._get(
-            url="/entrez/eutils/esearch.fcgi", parameters=parameters
+        response = cast(
+            Dict[str, Any],
+            self._get(
+                url="/entrez/eutils/esearch.fcgi",
+                parameters=parameters,
+                output="json",
+            ),
         )
 
         # Add the retrieved IDs to the list
@@ -579,8 +609,13 @@ class PubMedCentral(PubMed):
             parameters["retstart"] = retrieved_count
 
             # Make a new request
-            response = self._get(
-                url="/entrez/eutils/esearch.fcgi", parameters=parameters
+            response = cast(
+                Dict[str, Any],
+                self._get(
+                    url="/entrez/eutils/esearch.fcgi",
+                    parameters=parameters,
+                    output="json",
+                ),
             )
 
             # Add the retrieved IDs to the list
@@ -612,10 +647,13 @@ class PubMedCentral(PubMed):
         parameters["id"] = article_ids
 
         # Make the request
-        response = self._get(
-            url="/entrez/eutils/efetch.fcgi",
-            parameters=parameters,
-            output="xml",
+        response = cast(
+            str,
+            self._get(
+                url="/entrez/eutils/efetch.fcgi",
+                parameters=parameters,
+                output="xml",
+            ),
         )
 
         # Parse as XML

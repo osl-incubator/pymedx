@@ -1,5 +1,7 @@
 """Test helpers module."""
 
+from __future__ import annotations
+
 from xml.etree.ElementTree import Element, SubElement
 
 from pymedx.helpers import batches, getContent

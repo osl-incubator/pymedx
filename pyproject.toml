@@ -20,6 +20,11 @@ requires-python = ">3.9,<4"
 dependencies = [
   "requests (>=2.20.0)",
   "lxml (>=5.1.0)",
+  "types-lxml >=2023.10.21",
+  "typeguard >= 4",
+  "eval-type-backport >=0.2 ; python_version < '3.10'",
+  "types-requests (>=2.32)",
+  "typing-extensions (>=4.12)",
 ]
 
 [build-system]
@@ -51,7 +56,7 @@ mkdocstrings-python = ">=1.1.2"
 jupyterlab = ">=4.0.5"
 makim = "1.12.0"
 requests-cache = ">=1"
-types-lxml = "^2023.10.21"
+
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -72,11 +77,14 @@ verbose = false
 line-length = 79
 force-exclude = true
 src = ["./"]
-ignore = ["PLR0913"]
 exclude = [
   'docs',
   'examples',
 ]
+fix = true
+
+[tool.ruff.lint]
+ignore = ["PLR0913"]
 select = [
   "E",   # pycodestyle
   "F",   # pyflakes
@@ -86,12 +94,11 @@ select = [
   "RUF", # Ruff-specific rules
   "I001", # isort
 ]
-fix = true
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 # Use a single line between direct and from import
 lines-between-types = 1
 
@@ -100,14 +107,15 @@ quote-style = "double"
 
 
 [tool.mypy]
+python_version = "3.9"
 no_strict_optional = false
+# check_untyped_defs = true
+# strict = true
+# ignore_missing_imports = true
+# warn_unused_ignores = true
+# warn_redundant_casts = true
+# warn_unused_configs = true
 exclude = [
-    '^docs/$',
-    '^examples/$',
+  '^docs/$',
+  '^examples/$',
 ]
-
-[[tool.mypy.overrides]]
-module = [
-  "requests",
-]
-ignore_missing_imports = true
