@@ -1,15 +1,19 @@
 """Module for functions about book article."""
 
+from __future__ import annotations
+
 import datetime
 import json
 
 from typing import Any, Dict, List, Optional, Union
 
 from lxml.etree import _Element
+from typeguard import typechecked
 
 from .helpers import getContent
 
 
+@typechecked
 class PubMedBookArticle:
     """Data class that contains a PubMed article."""
 

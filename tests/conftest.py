@@ -3,7 +3,7 @@
 import os
 
 from pathlib import Path
-from typing import Dict, cast
+from typing import Dict, Generator, cast
 
 import pytest
 import requests_cache
@@ -13,7 +13,7 @@ from pymedx.api import PubMed, PubMedCentral
 
 
 @pytest.fixture(scope="session", autouse=True)
-def setup_request_cache():
+def setup_request_cache() -> Generator[None, None, None]:
     """
     Initialize the cache before any tests.
 
@@ -44,11 +44,22 @@ def env() -> dict[str, str]:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def pubmed(env) -> PubMed:
+def api_email(env: dict[str, str]) -> str:
     """Fixture to create a PubMed instance."""
-    params = dict(tool="TestTool", email="test@example.com")
+    return os.getenv("SERVICE_EMAIL", "")
 
-    api_key = os.getenv("NCBI_API_KEY", "")
+
+@pytest.fixture(scope="session", autouse=True)
+def api_key(env: dict[str, str]) -> str:
+    """Fixture to create a PubMed instance."""
+    return os.getenv("NCBI_API_KEY", "")
+
+
+@pytest.fixture(scope="session", autouse=True)
+def pubmed(env: dict[str, str], api_key: str, api_email: str) -> PubMed:
+    """Fixture to create a PubMed instance."""
+    params = dict(tool="TestTool", email=api_email)
+
     if api_key:
         params["api_key"] = api_key
 
@@ -56,9 +67,10 @@ def pubmed(env) -> PubMed:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def pmc(env) -> PubMedCentral:
+def pmc(env: dict[str, str]) -> PubMedCentral:
     """Fixture to create a PubMed instance."""
-    params = dict(tool="TestTool", email="test@example.com")
+    api_email = os.getenv("SERVICE_EMAIL", "")
+    params = dict(tool="TestTool", email=api_email)
 
     api_key = os.getenv("NCBI_API_KEY", "")
     if api_key:

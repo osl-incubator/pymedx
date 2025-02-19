@@ -1,15 +1,19 @@
 """Module for handling articles."""
 
+from __future__ import annotations
+
 import datetime
 import json
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 from lxml.etree import _Element
+from typeguard import typechecked
 
 from .helpers import getAbstract, getAllContent, getContent, getContentUnique
 
 
+@typechecked
 class PubMedArticle:
     """Data class that contains a PubMed article."""
 
@@ -141,15 +145,15 @@ class PubMedArticle:
         """Parse an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
-        self.title = self._extractTitle(xml_element)
+        self.title = cast(str, self._extractTitle(xml_element))
         self.keywords = self._extractKeywords(xml_element)
-        self.journal = self._extractJournal(xml_element)
-        self.abstract = self._extractAbstract(xml_element)
-        self.conclusions = self._extractConclusions(xml_element)
-        self.methods = self._extractMethods(xml_element)
-        self.results = self._extractResults(xml_element)
-        self.copyrights = self._extractCopyrights(xml_element)
-        self.doi = self._extractDoi(xml_element)
+        self.journal = cast(str, self._extractJournal(xml_element))
+        self.abstract = cast(str, self._extractAbstract(xml_element) or "")
+        self.conclusions = cast(str, self._extractConclusions(xml_element))
+        self.methods = cast(str, self._extractMethods(xml_element))
+        self.results = cast(str, self._extractResults(xml_element))
+        self.copyrights = cast(str, self._extractCopyrights(xml_element))
+        self.doi = cast(str, self._extractDoi(xml_element))
         self.publication_date = self._extractPublicationDate(xml_element)
         self.authors = self._extractAuthors(xml_element)
         self.xml = xml_element
@@ -174,6 +178,7 @@ class PubMedArticle:
         )
 
 
+@typechecked
 class PubMedCentralArticle:
     """Data class that contains a PubMedCentral article."""
 

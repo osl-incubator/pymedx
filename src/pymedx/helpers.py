@@ -5,14 +5,22 @@ from __future__ import annotations
 import datetime
 import re
 
-from typing import Generator, Optional, cast
+from typing import Generator, Optional, Union, cast
+from xml.etree.ElementTree import Element as EtreeElement
 
 import lxml.etree
 
-from lxml.etree import _Element
+from lxml.etree import _Element as LxmlElement
+from typeguard import typechecked
+from typing_extensions import TypeAlias
+
+Element: TypeAlias = Union[LxmlElement, EtreeElement]
 
 
-def arrange_query(search_term, start_date, end_date):
+@typechecked
+def arrange_query(
+    search_term: str, start_date: datetime.date, end_date: datetime.date
+) -> str:
     """
     Create a new query adding range date according PubMed format.
 
@@ -38,6 +46,7 @@ def arrange_query(search_term, start_date, end_date):
     return f"({search_term}) AND ({date_query})"
 
 
+@typechecked
 def get_search_term(input_string: str) -> str:
     """
     Extract just the search term from a full query.
@@ -83,6 +92,7 @@ def get_search_term(input_string: str) -> str:
     return cleaned_string.strip()
 
 
+@typechecked
 def get_range_months(
     start_date: datetime.date, end_date: datetime.date
 ) -> list[tuple[datetime.date, datetime.date]]:
@@ -145,6 +155,7 @@ def get_range_months(
     return date_ranges
 
 
+@typechecked
 def get_range_date_from_query(
     input_string: str,
 ) -> tuple[datetime.date, datetime.date] | None:
@@ -191,6 +202,7 @@ def get_range_date_from_query(
     return None
 
 
+@typechecked
 def get_range_years(
     start_date: datetime.date, end_date: datetime.date
 ) -> list[tuple[datetime.date, datetime.date]]:
@@ -245,9 +257,10 @@ def get_range_years(
     return date_ranges
 
 
+@typechecked
 def batches(
     iterable: list[str], n: int = 1
-) -> Generator[list[str], str, None]:
+) -> Generator[list[str], None, None]:
     """
     Create batches from an iterable.
 
@@ -272,8 +285,9 @@ def batches(
         yield iterable[index : min(index + n, length)]
 
 
+@typechecked
 def getContent(
-    element: _Element,
+    element: Element,
     path: str,
     default: Optional[str] = None,
     separator: str = "\n",
@@ -306,8 +320,9 @@ def getContent(
     return separator.join([sub.text for sub in result if sub.text is not None])
 
 
+@typechecked
 def getContentUnique(
-    element: _Element,
+    element: Element,
     path: str,
     default: Optional[str] = None,
 ) -> Optional[str | int]:
@@ -329,7 +344,7 @@ def getContentUnique(
         text in the XML node.
     """
     # Find the path in the element
-    result = cast(list[_Element], element.findall(path))
+    result = cast(list[Element], element.findall(path))
 
     # Return the default if there is no such element
     if not result:
@@ -339,8 +354,9 @@ def getContentUnique(
     return cast(str, result[0].text)
 
 
+@typechecked
 def getAllContent(
-    element: _Element,
+    element: Element,
     path: str,
     default: Optional[str] = None,
 ) -> Optional[str | int]:
@@ -382,8 +398,9 @@ def getAllContent(
     return " ".join(result.split())
 
 
+@typechecked
 def getAbstract(
-    element: _Element,
+    element: Element,
     path: str,
     default: Optional[str] = None,
 ) -> Optional[str | int]:

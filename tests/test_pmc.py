@@ -1,5 +1,7 @@
 """Test PubMedCentral class."""
 
+from __future__ import annotations
+
 import datetime
 
 from lxml import etree as xml
