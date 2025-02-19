@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import datetime
 
+from typing import cast
+
 import pytest
 
+from pymedx.api import PubMed
 from pymedx.article import PubMedArticle
 
 DOI_LEN_MIN = 5
@@ -14,9 +17,9 @@ TITLE_LEN_MIN = 10
 
 
 @pytest.fixture
-def book_article(pubmed) -> PubMedArticle:
+def book_article(pubmed: PubMed) -> PubMedArticle:
     """Fixture to create a PubMedBookArticle instance from dynamic XML."""
-    return next(pubmed._getArticles(["7"]))
+    return cast(PubMedArticle, next(pubmed._getArticles(["7"])))
 
 
 class TestPubMedBookArticle:

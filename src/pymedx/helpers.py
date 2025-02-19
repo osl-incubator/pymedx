@@ -291,7 +291,7 @@ def getContent(
     path: str,
     default: Optional[str] = None,
     separator: str = "\n",
-) -> Optional[str | int]:
+) -> Optional[str]:
     """
     Retrieve text content of an XML element.
 
@@ -325,7 +325,7 @@ def getContentUnique(
     element: Element,
     path: str,
     default: Optional[str] = None,
-) -> Optional[str | int]:
+) -> Optional[str]:
     """
     Retrieve text content of an XML element. Returns a unique value.
 
@@ -359,7 +359,7 @@ def getAllContent(
     element: Element,
     path: str,
     default: Optional[str] = None,
-) -> Optional[str | int]:
+) -> Optional[str]:
     """
     Retrieve text content of an XML element.
 
@@ -387,12 +387,16 @@ def getAllContent(
         return default
 
     # Get all text avoiding the tags
-    result = cast(
-        str,
-        lxml.etree.tostring(
-            raw_result[0], method="text", encoding="utf-8"
-        ).decode("utf-8"),
+    raw_bytes = lxml.etree.tostring(
+        raw_result[0],  # type: ignore
+        method="text",
+        encoding="utf-8",
     )
+
+    if isinstance(raw_bytes, bytes):
+        result = raw_bytes.decode("utf-8")
+    else:
+        result = raw_bytes
 
     # Extract the text and return it
     return " ".join(result.split())
@@ -403,7 +407,7 @@ def getAbstract(
     element: Element,
     path: str,
     default: Optional[str] = None,
-) -> Optional[str | int]:
+) -> Optional[str]:
     """
     Retrieve text content of an XML element.
 
@@ -435,17 +439,20 @@ def getAbstract(
         return default
 
     for fig in raw_result[0].iter("fig"):
-        parent = fig.getparent()
+        parent = fig.getparent()  # type: ignore
         if parent is not None:
-            parent.remove(fig)
+            parent.remove(fig)  # type: ignore
 
     # Get all text avoiding the tags
-    result = cast(
-        str,
-        lxml.etree.tostring(
-            raw_result[0], method="text", encoding="utf-8"
-        ).decode("utf-8"),
+    raw_bytes = lxml.etree.tostring(
+        raw_result[0],  # type: ignore
+        method="text",
+        encoding="utf-8",
     )
+    if isinstance(raw_bytes, bytes):
+        result = raw_bytes.decode("utf-8")
+    else:
+        result = raw_bytes
 
     # Extract the text and return it
     return " ".join(result.split())

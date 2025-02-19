@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 import json
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from lxml.etree import _Element
 from typeguard import typechecked
@@ -52,75 +52,57 @@ class PubMedBookArticle:
             for field in self.__slots__:
                 self.__setattr__(field, kwargs.get(field, None))
 
-    def _extractPubMedId(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractPubMedId(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//ArticleId[@IdType='pubmed']"
         return getContent(element=xml_element, path=path)
 
-    def _extractTitle(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractTitle(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//BookTitle"
         return getContent(element=xml_element, path=path)
 
-    def _extractAbstract(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractAbstract(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//AbstractText"
         return getContent(element=xml_element, path=path)
 
     def _extractCopyrights(
         self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    ) -> Optional[str]:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
-    def _extractDoi(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractDoi(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//ArticleId[@IdType='doi']"
         return getContent(element=xml_element, path=path)
 
-    def _extractIsbn(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractIsbn(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//Isbn"
         return getContent(element=xml_element, path=path)
 
-    def _extractLanguage(
-        self: object, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractLanguage(self: object, xml_element: _Element) -> Optional[str]:
         path = ".//Language"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublicationType(
-        self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractPublicationType(self, xml_element: _Element) -> Optional[str]:
         path = ".//PublicationType"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublicationDate(
-        self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractPublicationDate(self, xml_element: _Element) -> Optional[str]:
         path = ".//PubDate/Year"
         return getContent(element=xml_element, path=path)
 
-    def _extractPublisher(
-        self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractPublisher(self, xml_element: _Element) -> Optional[str]:
         path = ".//Publisher/PublisherName"
         return getContent(element=xml_element, path=path)
 
     def _extractPublisherLocation(
         self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    ) -> Optional[str]:
         path = ".//Publisher/PublisherLocation"
         return getContent(element=xml_element, path=path)
 
     def _extractAuthors(
         self: object, xml_element: _Element
-    ) -> List[dict[str, Union[str, None, int]]]:
+    ) -> List[dict[str, Optional[str]]]:
         return [
             {
                 "collective": getContent(author, path=".//CollectiveName"),
@@ -133,7 +115,7 @@ class PubMedBookArticle:
 
     def _extractSections(
         self, xml_element: _Element
-    ) -> List[dict[str, Union[str, None, int]]]:
+    ) -> List[dict[str, Optional[str]]]:
         return [
             {
                 "title": getContent(section, path=".//SectionTitle"),

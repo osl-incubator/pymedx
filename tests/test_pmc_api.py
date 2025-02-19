@@ -24,8 +24,8 @@ class TestPubMedCentral:
             query="COVID-19 vaccines",
             max_results=10,
         )
-        articles = list(articles)  # Convert from generator to list
-        assert len(articles) > 0  # Assert that we got some results
+        articles_list = list(articles)  # Convert from generator to list
+        assert len(articles_list) > 0  # Assert that we got some results
 
     def test_get_total_results_count(self, pmc: PubMedCentral) -> None:
         """Test getting the total results count for a query."""

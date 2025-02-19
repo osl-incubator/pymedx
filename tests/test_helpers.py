@@ -10,7 +10,7 @@ from pymedx.helpers import batches, getContent
 class TestHelpers:
     """Test the helpers module."""
 
-    def test_batches(self):
+    def test_batches(self) -> None:
         """Test the batches function."""
         input_list = [
             str(i) for i in range(10)
@@ -31,7 +31,7 @@ class TestHelpers:
             "Batches not generated as expected."
         )
 
-    def test_get_content(self):
+    def test_get_content(self) -> None:
         """Test the getContent function."""
         # Dynamically create XML structure
         root = Element("root")
