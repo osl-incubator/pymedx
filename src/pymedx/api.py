@@ -8,16 +8,16 @@ import random
 import time
 
 from copy import copy
-from typing import Any, Dict, Generator, Iterable, Iterator, cast
+from typing import Any, Dict, Generator, Iterator, cast
 
 import requests
 
 from lxml import etree as xml
 from typeguard import typechecked
 
-from .article import PubMedArticle, PubMedCentralArticle
-from .book import PubMedBookArticle
-from .helpers import (
+from pymedx.article import PubMedArticle, PubMedCentralArticle
+from pymedx.book import PubMedBookArticle
+from pymedx.helpers import (
     arrange_query,
     batches,
     get_range_date_from_query,
@@ -248,7 +248,7 @@ class PubMed:
 
                 # Return the response
                 if output == "json":
-                    return response.json()
+                    return cast(Dict[str, Any], response.json())
                 else:
                     return response.text
 
@@ -262,7 +262,10 @@ class PubMed:
         )
 
     def _getArticleIdsMonth(
-        self, search_term, range_begin_date, range_end_date
+        self,
+        search_term: str,
+        range_begin_date: datetime.date,
+        range_end_date: datetime.date,
     ) -> list[str]:
         article_ids = []
         range_dates_month = get_range_months(range_begin_date, range_end_date)
@@ -500,7 +503,7 @@ class PubMedCentral(PubMed):
         self,
         query: str,
         max_results: int = 100,
-    ) -> Iterable[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
+    ) -> Iterator[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
         """
         Execute a query agains the GraphQL schema.
 
@@ -631,16 +634,20 @@ class PubMedCentral(PubMed):
 
     def _getArticles(
         self, article_ids: list[str]
-    ) -> Iterable[PubMedArticle | PubMedBookArticle | PubMedCentralArticle]:
+    ) -> Generator[
+        PubMedArticle | PubMedBookArticle | PubMedCentralArticle, None, None
+    ]:
         """Batch a list of article IDs and retrieves the content.
 
         Parameters
         ----------
-            - article_ids   List, article IDs.
+        article_ids: List
+            article IDs.
 
         Returns
         -------
-            - articles      List, article objects.
+        articles: List
+            article objects.
         """
         # Get the default parameters
         parameters = self.parameters.copy()

@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import datetime
 
+from typing import cast
+
 import pytest
 
+from pymedx.api import PubMedCentral
 from pymedx.article import PubMedCentralArticle
 
 DOI_LEN_MIN = 5
@@ -13,13 +16,13 @@ DOI_LEN_MAX = 255
 
 
 @pytest.fixture(scope="module")
-def sample_pmc_article(pmc) -> PubMedCentralArticle:
+def sample_pmc_article(pmc: PubMedCentral) -> PubMedCentralArticle:
     """Fixture to create a PubMedArticle instance from dynamic XML."""
     article_ids = pmc.query("'machine learning'", max_results=10)
-    article_ids = list(article_ids)
-    article = article_ids[0]
+    article_ids_list = list(article_ids)
+    article = article_ids_list[0]
 
-    return article
+    return cast(PubMedCentralArticle, article)
 
 
 class TestArticle:
@@ -29,7 +32,7 @@ class TestArticle:
         self, sample_pmc_article: PubMedCentralArticle
     ) -> None:
         """Test that the DOI attribute has an expected length range."""
-        doi = sample_pmc_article.doi
+        doi = sample_pmc_article.doi or ""
         # although, by definition, doi size could be infinite
         # it seems in the applications it is limited to 255
         # for example:

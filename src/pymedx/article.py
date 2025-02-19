@@ -5,7 +5,7 @@ from __future__ import annotations
 import datetime
 import json
 
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional
 
 from lxml.etree import _Element
 from typeguard import typechecked
@@ -52,11 +52,11 @@ class PubMedArticle:
             for field in self.__slots__:
                 self.__setattr__(field, kwargs.get(field, None))
 
-    def _extractPubMedId(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractPubMedId(self, xml_element: _Element) -> Optional[str]:
         path = ".//PMID"
         return getContentUnique(element=xml_element, path=path)
 
-    def _extractTitle(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractTitle(self, xml_element: _Element) -> Optional[str]:
         path = ".//ArticleTitle"
         return getAllContent(element=xml_element, path=path)
 
@@ -68,35 +68,32 @@ class PubMedArticle:
             if keyword is not None
         ]
 
-    def _extractJournal(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractJournal(self, xml_element: _Element) -> Optional[str]:
         path = ".//Journal/Title"
         return getContent(element=xml_element, path=path)
 
-    def _extractAbstract(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractAbstract(self, xml_element: _Element) -> Optional[str]:
         path = ".//AbstractText"
-        return getAbstract(element=xml_element, path=path)
+        abstract = getAbstract(element=xml_element, path=path)
+        return abstract
 
-    def _extractConclusions(
-        self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractConclusions(self, xml_element: _Element) -> Optional[str]:
         path = ".//AbstractText[@Label='CONCLUSION']"
         return getContent(element=xml_element, path=path)
 
-    def _extractMethods(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractMethods(self, xml_element: _Element) -> Optional[str]:
         path = ".//AbstractText[@Label='METHOD']"
         return getContent(element=xml_element, path=path)
 
-    def _extractResults(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractResults(self, xml_element: _Element) -> Optional[str]:
         path = ".//AbstractText[@Label='RESULTS']"
         return getContent(element=xml_element, path=path)
 
-    def _extractCopyrights(
-        self, xml_element: _Element
-    ) -> Union[str, None, int]:
+    def _extractCopyrights(self, xml_element: _Element) -> Optional[str]:
         path = ".//CopyrightInformation"
         return getContent(element=xml_element, path=path)
 
-    def _extractDoi(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractDoi(self, xml_element: _Element) -> Optional[str]:
         path = ".//ArticleId[@IdType='doi']"
         return getContentUnique(element=xml_element, path=path)
 
@@ -128,7 +125,7 @@ class PubMedArticle:
 
     def _extractAuthors(
         self, xml_element: _Element
-    ) -> List[dict[str, Union[str, None, int]]]:
+    ) -> List[dict[str, Optional[str]]]:
         return [
             {
                 "lastname": getContent(author, ".//LastName", None),
@@ -145,15 +142,15 @@ class PubMedArticle:
         """Parse an XML element into an article object."""
         # Parse the different fields of the article
         self.pubmed_id = self._extractPubMedId(xml_element)
-        self.title = cast(str, self._extractTitle(xml_element))
+        self.title = self._extractTitle(xml_element)
         self.keywords = self._extractKeywords(xml_element)
-        self.journal = cast(str, self._extractJournal(xml_element))
-        self.abstract = cast(str, self._extractAbstract(xml_element) or "")
-        self.conclusions = cast(str, self._extractConclusions(xml_element))
-        self.methods = cast(str, self._extractMethods(xml_element))
-        self.results = cast(str, self._extractResults(xml_element))
-        self.copyrights = cast(str, self._extractCopyrights(xml_element))
-        self.doi = cast(str, self._extractDoi(xml_element))
+        self.journal = self._extractJournal(xml_element)
+        self.abstract = self._extractAbstract(xml_element) or ""
+        self.conclusions = self._extractConclusions(xml_element)
+        self.methods = self._extractMethods(xml_element)
+        self.results = self._extractResults(xml_element)
+        self.copyrights = self._extractCopyrights(xml_element)
+        self.doi = self._extractDoi(xml_element)
         self.publication_date = self._extractPublicationDate(xml_element)
         self.authors = self._extractAuthors(xml_element)
         self.xml = xml_element
@@ -230,11 +227,11 @@ class PubMedCentralArticle:
             for field in self.__slots__:
                 self.__setattr__(field, kwargs.get(field, None))
 
-    def _extractPMCId(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractPMCId(self, xml_element: _Element) -> Optional[str]:
         path = ".//article-meta/article-id[@pub-id-type='pmc']"
         return getContentUnique(element=xml_element, path=path)
 
-    def _extractTitle(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractTitle(self, xml_element: _Element) -> Optional[str]:
         path = ".//title-group"
         return getAllContent(element=xml_element, path=path)
 
@@ -248,38 +245,38 @@ class PubMedCentralArticle:
     #     ]
     # TODO: adapt the function for PubMed Central
     # def _extractJournal
-    # (self, xml_element: _Element) -> Union[str, None, int]:
+    # (self, xml_element: _Element) -> Optional[str]:
     #     path = ".//Journal/Title"
     #     return getContent(element=xml_element, path=path)
 
-    def _extractAbstract(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractAbstract(self, xml_element: _Element) -> Optional[str]:
         path = ".//abstract"
         return getAllContent(element=xml_element, path=path)
 
     # TODO: adapt the function for PubMed Central
     # def _extractConclusions(
     #     self, xml_element: _Element
-    # ) -> Union[str, None, int]:
+    # ) -> Optional[str]:
     #     path = ".//AbstractText[@Label='CONCLUSION']"
     #     return getContent(element=xml_element, path=path)
     # TODO: adapt the function for PubMed Central
     # def _extractMethods(self, xml_element: _Element)
-    # -> Union[str, None, int]:
+    # -> Optional[str]:
     #     path = ".//AbstractText[@Label='METHOD']"
     #     return getContent(element=xml_element, path=path)
     # TODO: adapt the function for PubMed Central
     # def _extractResults(self, xml_element: _Element)
-    # -> Union[str, None, int]:
+    # -> Optional[str]:
     #     path = ".//AbstractText[@Label='RESULTS']"
     #     return getContent(element=xml_element, path=path)
     # TODO: adapt the function for PubMed Central
     # def _extractCopyrights(
     #     self, xml_element: _Element
-    # ) -> Union[str, None, int]:
+    # ) -> Optional[str]:
     #     path = ".//CopyrightInformation"
     #     return getContent(element=xml_element, path=path)
 
-    def _extractDoi(self, xml_element: _Element) -> Union[str, None, int]:
+    def _extractDoi(self, xml_element: _Element) -> Optional[str]:
         path = ".//article-meta/article-id[@pub-id-type='doi']"
         return getContentUnique(element=xml_element, path=path)
 
@@ -318,7 +315,7 @@ class PubMedCentralArticle:
 
     def _extractAuthors(
         self, xml_element: _Element
-    ) -> List[dict[str, Union[str, None, int]]]:
+    ) -> List[dict[str, Optional[str]]]:
         contrib_group = xml_element.findall(".//contrib-group")
         if contrib_group:
             return [

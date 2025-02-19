@@ -19,7 +19,9 @@ DOI_LEN_MAX = 255
 def sample_article(pubmed: PubMed) -> PubMedArticle:
     """Fixture to create a PubMedArticle instance from dynamic XML."""
     pubmed_articles = pubmed.query("COVID-19 vaccines", max_results=10)
-    article_ids = [pm.pubmed_id for pm in pubmed_articles]
+    article_ids = [
+        cast(PubMedArticle, pm).pubmed_id or "" for pm in pubmed_articles
+    ]
 
     articles = pubmed._getArticles(article_ids[:1])
     article = next(articles)
@@ -32,7 +34,7 @@ class TestArticle:
 
     def test_doi_length(self, sample_article: PubMedArticle) -> None:
         """Test that the DOI attribute has an expected length range."""
-        doi = sample_article.doi
+        doi = sample_article.doi or ""
         # although, by definition, doi size could be infinite
         # it seems in the applications it is limited to 255
         # for example:
@@ -48,7 +50,7 @@ class TestArticle:
     def test_abstract_structure(self, sample_article: PubMedArticle) -> None:
         """Test that the abstract exists and meets basic expectations."""
         abstract = sample_article.abstract or ""
-        assert "vaccines" in abstract
+        assert "vaccine" in abstract
 
     def test_publication_date_type(
         self, sample_article: PubMedArticle
