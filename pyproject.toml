@@ -1,6 +1,6 @@
 [project]
 name = "pymedx"
-version = "0.5.0"  # semantic-release
+version = "0.5.1"  # semantic-release
 description = "PyMedX is a tool set for handling multimedia files."
 readme = "docs/index.md"
 authors = [
