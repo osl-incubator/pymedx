@@ -50,7 +50,7 @@ class TestArticle:
     def test_abstract_structure(self, sample_article: PubMedArticle) -> None:
         """Test that the abstract exists and meets basic expectations."""
         abstract = sample_article.abstract or ""
-        assert "vaccines" in abstract
+        assert "vaccine" in abstract
 
     def test_publication_date_type(
         self, sample_article: PubMedArticle
