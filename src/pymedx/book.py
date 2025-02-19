@@ -53,7 +53,7 @@ class PubMedBookArticle:
                 self.__setattr__(field, kwargs.get(field, None))
 
     def _extractPubMedId(self: object, xml_element: _Element) -> Optional[str]:
-        path = ".//ArticleId[@IdType='pubmed']"
+        path = ".//BookDocument/PMID"
         return getContent(element=xml_element, path=path)
 
     def _extractTitle(self: object, xml_element: _Element) -> Optional[str]:
@@ -71,7 +71,7 @@ class PubMedBookArticle:
         return getContent(element=xml_element, path=path)
 
     def _extractDoi(self: object, xml_element: _Element) -> Optional[str]:
-        path = ".//ArticleId[@IdType='doi']"
+        path = ".//BookDocument/ArticleIdList/ArticleId[@IdType='doi']"
         return getContent(element=xml_element, path=path)
 
     def _extractIsbn(self: object, xml_element: _Element) -> Optional[str]:
