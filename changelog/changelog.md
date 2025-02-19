@@ -1,6 +1,15 @@
 # Release Notes
 ---
 
+## [0.5.1](https://github.com/osl-incubator/pymedx/compare/0.5.0...0.5.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* Fix issues with typing annotation and mypy ([#18](https://github.com/osl-incubator/pymedx/issues/18)) ([5e2814d](https://github.com/osl-incubator/pymedx/commit/5e2814d7b88c8104bfdd4d362251166ef4b01172))
+* Fix multi values in some attributes in PubMedBookArticle ([#19](https://github.com/osl-incubator/pymedx/issues/19)) ([72d2f74](https://github.com/osl-incubator/pymedx/commit/72d2f745dc78e0a073b17c582e7cc688e4bef430))
+* Implement typing check in run time with typeguard ([#17](https://github.com/osl-incubator/pymedx/issues/17)) ([4532182](https://github.com/osl-incubator/pymedx/commit/45321828e71c5731dc00d5aa9b5a1b5d990cd899))
+
 # [0.5.0](https://github.com/osl-incubator/pymedx/compare/0.4.0...0.5.0) (2024-05-24)
 
 
